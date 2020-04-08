@@ -151,8 +151,11 @@ public class BaseController {
         return date;
     }
 
+<<<<<<< HEAD
     
 
+=======
+>>>>>>> 775b0478ca56ef5f11b8ca9f1a789f3367dc0f92
     public boolean Empty(String string) {
         return string == null || string.trim().equals("");
     }
