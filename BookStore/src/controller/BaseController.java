@@ -151,6 +151,8 @@ public class BaseController {
         return date;
     }
 
+    
+
     public boolean Empty(String string) {
         return string == null || string.trim().equals("");
     }
