@@ -5,6 +5,7 @@
  */
 package bookstore;
 
+import controller.AdminManager;
 import controller.BaseController;
 import controller.HomeController;
 import controller.OrderController;
@@ -27,6 +28,7 @@ public class BookStore {
     public static void main(String[] args) {
         Connection conn = connection.Connecting();
         
+        AdminManager _adminManager = new AdminManager(conn);
         BaseController _baseController = new BaseController(conn);
         HomeController _homeController = new HomeController(conn);
         ProductController _productController = new ProductController(conn);
@@ -52,6 +54,8 @@ public class BookStore {
                     //_productController.manageFilterMenu();
                     break;
                 case 5:
+                    _adminManager.menu();
+                case 6:
                     System.exit(0);
                     break;
                 default:

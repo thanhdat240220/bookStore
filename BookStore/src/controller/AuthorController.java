@@ -11,27 +11,27 @@ import java.sql.Connection;
  *
  * @author T440s
  */
-public class ProductController extends BaseController{
+public class AuthorController extends BaseController {
 
-    public ProductController(Connection connect) {
+    public AuthorController(Connection connect) {
         super(connect);
     }
-    
+
     public void showProductEditor() {
         //makeMenuHeader("Products infomation Editor");
         //showAll();
         makeMenuRow("Options:");
-        makeMenuRow("   1.Add Product");
-        makeMenuRow("   2.Edit Product");
-        makeMenuRow("   3.Delete Product");
-        makeMenuRow("   4.Watch Product Detail");
-        makeMenuRow("   5.Show all Products");
+        makeMenuRow("   1.Add Author");
+        makeMenuRow("   2.Edit Author");
+        makeMenuRow("   3.Delete Author");
+        makeMenuRow("   4.Watch Author");
+        makeMenuRow("   5.Show All Author");
         makeMenuRow("   6.Back to previous page");
         makeMenuFooter();
     }
-    
-    public void menu(){
-           int choice;
+
+    public void menu() {
+        int choice;
         do {
             showProductEditor();
             choice = enterNumber("an option");
@@ -59,6 +59,4 @@ public class ProductController extends BaseController{
             }
         } while (choice != 6);
     }
-    
-    
 }
