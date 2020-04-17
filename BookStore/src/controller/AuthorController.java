@@ -52,6 +52,7 @@ public class AuthorController extends BaseController {
                     //clearConsole();
                     break;
                 case 6:
+                    back();
                     break;
                 default:
                     makeRow("Option is invalid!");

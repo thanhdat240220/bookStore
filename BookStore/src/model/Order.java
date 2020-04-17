@@ -5,6 +5,9 @@
  */
 package model;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 /**
  *
  * @author T440s
@@ -13,6 +16,24 @@ public class Order {
     public int Id;
     public int customer_id;
     public int employee_id;
+    public Date create_date;
+    public ArrayList<OrderDetail> orderDetails;
+
+    public void setOrderDetails(ArrayList<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
+
+    public ArrayList<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setCreate_date(Date create_date) {
+        this.create_date = create_date;
+    }
+
+    public Date getCreate_date() {
+        return create_date;
+    }
 
     public int getId() {
         return Id;

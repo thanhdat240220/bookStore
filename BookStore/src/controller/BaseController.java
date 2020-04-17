@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,6 +38,7 @@ public class BaseController {
         makeMenuRow("2. Home.");
         makeMenuRow("3. Quick search.");
         makeMenuRow("4. Filter products.");
+        makeMenuRow("5. Admin System.");
         makeMenuRow("5. Exit.");
         makeMenuFooter();
     }
@@ -79,7 +82,7 @@ public class BaseController {
         } while (true);
         return Double.parseDouble(choiceStr);
     }
-    
+
     public String enterEmail() {
         String email = "";
         do {
@@ -154,7 +157,7 @@ public class BaseController {
     public boolean Empty(String string) {
         return string == null || string.trim().equals("");
     }
-    
+
     public int makeMenuHeader(String name) {
         System.out.println("");
         String header = " -------------------" + name.toUpperCase() + " ------------------";
@@ -194,5 +197,16 @@ public class BaseController {
             space += " ";
         }
         System.out.println("| " + option + space + " |");
+    }
+
+    public void back() {
+        try {
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 }

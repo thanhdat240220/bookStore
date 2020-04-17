@@ -45,7 +45,7 @@ public class BookStore {
                    // _userController.login();
                     break;
                 case 2:
-                    //_homeController.manageMenu();
+                    _homeController.menu();
                     break;
                 case 3:
                     //_quickSearchManager.showMenu();

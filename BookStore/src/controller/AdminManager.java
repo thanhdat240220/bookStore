@@ -15,11 +15,13 @@ public class AdminManager extends BaseController {
 
     private ProductController _ProductController;
     private AuthorController _AuthorController;
+    private OrderController _OrderController;
 
     public AdminManager(Connection connect) {
         super(connect);
         _ProductController = new ProductController(connect);
         _AuthorController = new AuthorController(connect);
+        _OrderController = new OrderController(connect);
     }
 
     public void menu() {
@@ -40,9 +42,11 @@ public class AdminManager extends BaseController {
                     _AuthorController.menu();
                     break;
                 case 3:
-                    //_billManager.manageMenu();
+                    _OrderController.menu();
                     break;
                 case 4:
+                    //logout();
+                    back();
                     break;
                 default:
                     System.out.println("¤ Option is invalid!");
