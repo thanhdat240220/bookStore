@@ -12,6 +12,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Employee;
 import model.Order;
 import model.OrderDetail;
 
@@ -22,6 +23,7 @@ import model.OrderDetail;
 public class OrderController extends BaseController {
 
     protected Statement statement;
+    protected Employee _employee;
 
     public OrderController(Connection connect) {
         super(connect);
@@ -32,7 +34,8 @@ public class OrderController extends BaseController {
         }
     }
 
-    public void menu() {
+    public void menu(Employee employee) {
+        _employee = employee;
         int choice;
         do {
             makeMenuHeader("Bills infomation Management");
@@ -94,8 +97,8 @@ public class OrderController extends BaseController {
             }
         } while (choice != 5);
     }
-    
-     public void MenuDelivering() {
+
+    public void MenuDelivering() {
         int choice;
         do {
             makeMenuHeader("Undelivered Orders Management");
@@ -129,7 +132,7 @@ public class OrderController extends BaseController {
         } while (choice != 5);
     }
 
-     public void MenuDelivered() {
+    public void MenuDelivered() {
         int choice;
         do {
             makeMenuHeader("Undelivered Orders Management");
@@ -158,7 +161,7 @@ public class OrderController extends BaseController {
             }
         } while (choice != 4);
     }
-     
+
     public void showOrderDetail(int StatusId) {
         int OrderID = enterNumber("Order ID");
         ArrayList<Order> orders = getOrders("Id=" + OrderID + " and status_id=" + StatusId);
@@ -174,7 +177,7 @@ public class OrderController extends BaseController {
 
             for (OrderDetail orderDetail : orderDetails) {
                 makeRow("- Book Name: " + orderDetail.book_name);
-                makeRow("  Quantity: " + orderDetail.quantity);
+                makeRow("- Quantity: " + orderDetail.quantity);
             }
         } else {
             makeRow("Not found order has ID=" + OrderID);
@@ -186,7 +189,7 @@ public class OrderController extends BaseController {
         ArrayList<Order> orders = getOrders("Id=" + OrderID + " and status_id=" + StatusId);
         if (orders.size() > 0) {
             try {
-                String sql = "update orders set status_id = " + ++StatusId + " where id=" + OrderID;
+                String sql = "update orders set status_id = " + ++StatusId + " and employee_id=" + _employee.getId() + " where id=" + OrderID;
                 statement.executeUpdate(sql);
                 makeRow("Update Success");
             } catch (SQLException ex) {

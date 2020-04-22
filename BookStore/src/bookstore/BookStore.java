@@ -54,7 +54,7 @@ public class BookStore {
                     //_productController.manageFilterMenu();
                     break;
                 case 5:
-                    _adminManager.menu();
+                    _adminManager.login();
                 case 6:
                     System.exit(0);
                     break;

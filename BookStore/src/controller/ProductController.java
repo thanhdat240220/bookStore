@@ -20,7 +20,6 @@ public class ProductController extends BaseController{
     public void showProductEditor() {
         //makeMenuHeader("Products infomation Editor");
         //showAll();
-        makeMenuRow("Options:");
         makeMenuRow("   1.Add Product");
         makeMenuRow("   2.Edit Product");
         makeMenuRow("   3.Delete Product");

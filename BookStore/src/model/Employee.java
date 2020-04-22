@@ -12,18 +12,28 @@ import java.util.Date;
  * @author T440s
  */
 public class Employee {
+
+    public int id;
     public String accountName;
-    public String password;
+    public String _password;
     public String name;
     public Date date_of_birth;
     public String address;
-    
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
     public String getAccountName() {
         return accountName;
     }
 
     public String getPassword() {
-        return password;
+        return _password;
     }
 
     public String getName() {
@@ -51,7 +61,7 @@ public class Employee {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this._password = password;
     }
 
     public void setName(String name) {

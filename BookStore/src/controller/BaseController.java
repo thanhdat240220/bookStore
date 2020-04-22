@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import model.Employee;
 
 /**
  *
@@ -34,7 +35,7 @@ public class BaseController {
 
     public void showMainMenu() {
         makeMenuHeader("BOOK STORE");
-        makeMenuRow("1. Login for employee.");
+        makeMenuRow("1. Login for User.");
         makeMenuRow("2. Home.");
         makeMenuRow("3. Quick search.");
         makeMenuRow("4. Filter products.");

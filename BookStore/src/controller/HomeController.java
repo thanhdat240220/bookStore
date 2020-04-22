@@ -25,10 +25,12 @@ public class HomeController extends BaseController {
         int choice;
         do {
             makeMenuHeader("System management window");
-            makeMenuRow("1.Manage Products");
-            makeMenuRow("2.Manage Author");
-            makeMenuRow("3.Manage Order");
-            makeMenuRow("4.Back to main menu");
+            makeMenuRow("1. Quick search Products.");
+            makeMenuRow("2. Filter Products by Kind.");
+            makeMenuRow("3. Show Cart");
+            makeMenuRow("4. Add product to cart.");
+            makeMenuRow("5. Start Order.");
+            makeMenuRow("6.Back to main menu");
             makeMenuFooter();
             choice = enterNumber("an option");
             switch (choice) {
@@ -40,7 +42,7 @@ public class HomeController extends BaseController {
                     //_billManager.manageMenu();
                     break;
                 case 4: {
-                    
+
                 }
                 break;
                 default:
