@@ -7,10 +7,11 @@ package controller;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,11 +33,12 @@ public class BaseController {
 
     public void showMainMenu() {
         makeMenuHeader("BOOK STORE");
-        makeMenuRow("1. Login for employee.");
+        makeMenuRow("1. Login for User.");
         makeMenuRow("2. Home.");
         makeMenuRow("3. Quick search.");
         makeMenuRow("4. Filter products.");
-        makeMenuRow("5. Exit.");
+        makeMenuRow("5. Admin System.");
+        makeMenuRow("6. Exit.");
         makeMenuFooter();
     }
 
@@ -55,7 +57,7 @@ public class BaseController {
     public int enterNumber(String option) {
         String choiceStr = "";
         do {
-            System.out.print("- Enter " + option + ":");
+            System.out.print("- Enter " + option + ": ");
             choiceStr = scanner.nextLine();
             if (isDouble(choiceStr)) {
                 break;
@@ -69,7 +71,7 @@ public class BaseController {
     public Double enterRealNumber(String option) {
         String choiceStr = "";
         do {
-            System.out.print("- Enter " + option + ":");
+            System.out.print("- Enter " + option + ": ");
             choiceStr = scanner.nextLine();
             if (isDouble(choiceStr)) {
                 break;
@@ -79,7 +81,7 @@ public class BaseController {
         } while (true);
         return Double.parseDouble(choiceStr);
     }
-    
+
     public String enterEmail() {
         String email = "";
         do {
@@ -113,12 +115,12 @@ public class BaseController {
     }
 
     public String enterString(String option) {
-        System.out.print("- Enter " + option + ":");
+        System.out.print("- Enter " + option + ": ");
         String choiceStr = "";
         do {
             choiceStr = scanner.nextLine();
             if (choiceStr.trim().isEmpty()) {
-                System.out.println("- " + option + " must has infomation!");
+                System.out.println("- " + option + " must has information!");
                 System.out.print("- Re-enter " + option + ": ");
             } else {
                 break;
@@ -128,7 +130,7 @@ public class BaseController {
     }
 
     public boolean enterBoolean(String option) {
-        System.out.print("- Enter " + option + " (yes/no):");
+        System.out.print("- Enter " + option + " (yes/no): ");
         String choiceStr = scanner.nextLine();
         return choiceStr.contains("y") || choiceStr.contains("Y");
     }
@@ -138,7 +140,7 @@ public class BaseController {
         String date = "";
         do {
             try {
-                System.out.print("- Enter " + option + " (dd/MM/yyyy HH:mm):");
+                System.out.print("- Enter " + option + " (dd/MM/yyyy HH:mm): ");
                 date = scanner.nextLine();
                 SimpleDateFormat formatter1 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 formatter1.parse(date);
@@ -151,15 +153,10 @@ public class BaseController {
         return date;
     }
 
-<<<<<<< HEAD
-    
-
-=======
->>>>>>> 775b0478ca56ef5f11b8ca9f1a789f3367dc0f92
     public boolean Empty(String string) {
         return string == null || string.trim().equals("");
     }
-    
+
     public int makeMenuHeader(String name) {
         System.out.println("");
         String header = " -------------------" + name.toUpperCase() + " ------------------";
@@ -199,5 +196,16 @@ public class BaseController {
             space += " ";
         }
         System.out.println("| " + option + space + " |");
+    }
+
+    public void back() {
+        try {
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 }

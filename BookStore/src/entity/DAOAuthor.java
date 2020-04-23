@@ -59,6 +59,7 @@ public class DAOAuthor {
         try {
             Statement statement = connection.createStatement();
             n = statement.executeUpdate(sql);
+            System.out.println("Deleted successfully!");
         } catch (SQLException e) {
             e.printStackTrace();
         }

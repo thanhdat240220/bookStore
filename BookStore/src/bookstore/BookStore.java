@@ -5,13 +5,10 @@
  */
 package bookstore;
 
-import controller.BaseController;
-import controller.HomeController;
-import controller.OrderController;
-import controller.ProductController;
-import controller.UserController;
-import java.sql.Connection;
+import controller.*;
 import model.DBConnection;
+
+import java.sql.Connection;
 
 /**
  *
@@ -30,8 +27,9 @@ public class BookStore {
         BaseController _baseController = new BaseController(conn);
         HomeController _homeController = new HomeController(conn);
         ProductController _productController = new ProductController(conn);
-        UserController _userController = new UserController(conn);
-        OrderController _orderController = new OrderController(conn);
+//        UserController _userController = new UserController(conn);
+//        OrderController _orderController = new OrderController(conn);
+        AdminManager _adminManager = new AdminManager(conn);
         
         int selected;
         do {
@@ -52,13 +50,16 @@ public class BookStore {
                     //_productController.manageFilterMenu();
                     break;
                 case 5:
+                    _adminManager.menu();
+                    break;
+                case 6:
                     System.exit(0);
                     break;
                 default:
                     System.out.println("Option is invalid!");
                     break;
             }
-        } while (selected != 5);
+        } while (selected != 6);
         connection.close();
     }
     
