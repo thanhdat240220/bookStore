@@ -11,7 +11,6 @@ import model.Author;
 import java.sql.Connection;
 
 /**
- *
  * @author T440s
  */
 public class AuthorController extends BaseController {
@@ -58,12 +57,24 @@ public class AuthorController extends BaseController {
                     System.out.println("Edit an Author".toUpperCase());
                     Author authorToEdit = new Author();
                     int idToEdit = enterNumber("ID to Edit");
-                    authorToEdit.setId(idToEdit);
-                    String nameToEdit = enterString("New Name");
-                    authorToEdit.setName(nameToEdit);
-                    int yearOfBirthToEdit = enterNumber("New Year of Birth");
-                    authorToEdit.setYear_birthday(yearOfBirthToEdit);
-                    daoAuthor.editAuthor(authorToEdit);
+
+                    while (true) {
+                        if (daoAuthor.checkExistedAuthor(idToEdit).equals("")) {
+                            System.out.println("No Author exist! Please try again!");
+                            idToEdit = enterNumber("ID to Edit");
+                        } else {
+                            authorToEdit.setId(idToEdit);
+                            String nameToEdit = enterString("New Name");
+                            authorToEdit.setName(nameToEdit);
+                            makeMenuFooter();
+                            int yearOfBirthToEdit = enterNumber("New Year of Birth");
+                            authorToEdit.setYear_birthday(yearOfBirthToEdit);
+                            makeMenuFooter();
+
+                            daoAuthor.editAuthor(authorToEdit);
+                            break;
+                        }
+                    }
                     break;
                 case 3:
                     //delete();

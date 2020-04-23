@@ -44,13 +44,8 @@ public class DAOAuthor {
             preparedStatement.setInt(2, author.getYear_birthday());
             preparedStatement.setInt(3, author.getId());
 
-            if (!checkExistedAuthor(author.getId()).equals("")) {
-                n = preparedStatement.executeUpdate();
-                System.out.println("Edited successfully!");
-            } else {
-                System.out.println("No Author exist! Please try again!");
-            }
-
+            n = preparedStatement.executeUpdate();
+            System.out.println("Edited successfully!");
         } catch (SQLException e) {
             e.printStackTrace();
         }

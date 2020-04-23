@@ -5,20 +5,25 @@
  */
 package controller;
 
+import entity.DAOProduct;
+
 import java.sql.Connection;
 
 /**
- *
  * @author T440s
  */
-public class ProductController extends BaseController{
+public class ProductController extends BaseController {
+
+    DAOProduct daoProduct;
 
     public ProductController(Connection connect) {
         super(connect);
+        daoProduct = new DAOProduct(connect);
+        this.connection = connect;
     }
-    
+
     public void showProductEditor() {
-        //makeMenuHeader("Products infomation Editor");
+        //makeMenuHeader("Products information Editor");
         //showAll();
         makeMenuRow("   1.Add Product");
         makeMenuRow("   2.Edit Product");
@@ -28,9 +33,9 @@ public class ProductController extends BaseController{
         makeMenuRow("   6.Back to previous page");
         makeMenuFooter();
     }
-    
-    public void menu(){
-           int choice;
+
+    public void menu() {
+        int choice;
         do {
             showProductEditor();
             choice = enterNumber("an option");
@@ -58,6 +63,6 @@ public class ProductController extends BaseController{
             }
         } while (choice != 6);
     }
-    
-    
+
+
 }

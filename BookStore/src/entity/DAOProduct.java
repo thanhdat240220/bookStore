@@ -1,7 +1,6 @@
 package entity;
 
 import model.Book;
-import model.DBConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,12 +8,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DAOProduct {
-    DBConnection dbConnection;
     Connection connection;
 
-    public DAOProduct(DBConnection dbConnection) {
-        this.dbConnection = dbConnection;
-        this.connection = dbConnection.Connecting();
+    public DAOProduct(Connection connection) {
+        this.connection = connection;
     }
 
     public int addProduct(Book book) {
