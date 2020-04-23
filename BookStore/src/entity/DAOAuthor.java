@@ -39,12 +39,18 @@ public class DAOAuthor {
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
             preparedStatement.setString(1, author.getName());
             preparedStatement.setInt(2, author.getYear_birthday());
             preparedStatement.setInt(3, author.getId());
 
-            n = preparedStatement.executeUpdate();
-            System.out.println("Edited successfully!");
+            if (!checkExistedAuthor(author.getId()).equals("")) {
+                n = preparedStatement.executeUpdate();
+                System.out.println("Edited successfully!");
+            } else {
+                System.out.println("No Author exist! Please try again!");
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -55,11 +61,14 @@ public class DAOAuthor {
     public int removeAuthor(int id) {
         int n = 0;
         String sql = "DELETE FROM author WHERE id=" + id;
-
         try {
             Statement statement = connection.createStatement();
-            n = statement.executeUpdate(sql);
-            System.out.println("Deleted successfully!");
+            if (!checkExistedAuthor(id).equals("")) {
+                n = statement.executeUpdate(sql);
+                System.out.println("Deleted successfully!");
+            } else {
+                System.out.println("No author exist! Please try again!");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -109,11 +118,31 @@ public class DAOAuthor {
         showAnAuthor(sql);
     }
 
+    public String checkExistedAuthor(int id) {
+        String sql = "SELECT * FROM author WHERE id=" + id;
+        String strToCheck = "";
+
+        try {
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+//                int idToCheck = resultSet.getInt("id");
+                resultSet.getString("name");
+                strToCheck = resultSet.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return strToCheck;
+    }
+
     public ResultSet getData(String sql) {
         ResultSet resultSet = null;
         try {
             Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             resultSet = statement.executeQuery(sql);
+            System.out.println(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
         }
