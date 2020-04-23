@@ -76,18 +76,27 @@ public class DAOAuthor {
         return n;
     }
 
-    public void showAnAuthor(String sql) {
-        ResultSet resultSet = getData(sql);
-        try {
-            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+    public void showAnAuthor(int idToShow) {
+        String sql = "SELECT * FROM author WHERE id=" + idToShow;
+        Statement statement;
 
-            int n = resultSetMetaData.getColumnCount();
-            while (resultSet.next()) {
-                for (int i = 1; i <= n; i++) {
-                    System.out.println(resultSet.getString(i) + "\t");
+        try {
+            statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+            if (!checkExistedAuthor(idToShow).equals("")) {
+                ResultSet resultSet = statement.executeQuery(sql);
+
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    String name = resultSet.getString("name");
+                    int year_of_birth = resultSet.getInt("year_of_birth");
+
+                    System.out.println("ID: " + id + "\t | \t Name: " + name + "\t | \t Year of Birth:" + year_of_birth);
                 }
-                System.out.println();
+            } else {
+                System.out.println("No author exist! Please try again!");
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -95,27 +104,24 @@ public class DAOAuthor {
     }
 
     public void showAllAuthor() {
-//        int n = 0;
         String sql = "SELECT * FROM author";
-//        Statement statement;
-//
-//        try {
-//            statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//            ResultSet resultSet = statement.executeQuery(sql);
-//
-//            while (resultSet.next()) {
-//                int id = resultSet.getInt("id");
-//                String name = resultSet.getString("name");
-//                int year_of_birth = resultSet.getInt("year_of_birth");
-//
-//                Author author = new Author(id, name, year_of_birth);
-//                System.out.println(author);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        Statement statement;
 
-        showAnAuthor(sql);
+        try {
+            statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                int year_of_birth = resultSet.getInt("year_of_birth");
+
+                System.out.println("ID: " + id + "\t | \t Name: " + name + "\t | \t Year of Birth: " + year_of_birth);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public String checkExistedAuthor(int id) {
