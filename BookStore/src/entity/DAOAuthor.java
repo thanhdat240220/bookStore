@@ -62,7 +62,7 @@ public class DAOAuthor {
                 n = statement.executeUpdate(sql);
                 System.out.println("Deleted successfully!");
             } else {
-                System.out.println("No author exist! Please try again!");
+                System.out.println("Author not Found! Please try again!");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -89,7 +89,7 @@ public class DAOAuthor {
                     System.out.println("ID: " + id + "\t | \t Name: " + name + "\t | \t Year of Birth:" + year_of_birth);
                 }
             } else {
-                System.out.println("No author exist! Please try again!");
+                System.out.println("Author not Found!");
             }
 
         } catch (SQLException e) {
@@ -136,6 +136,28 @@ public class DAOAuthor {
             e.printStackTrace();
         }
         return strToCheck;
+    }
+
+    public Author checkDuplicateAuthor() {
+        String sql = "SELECT * FROM author";
+        Author author = null;
+
+        try {
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                int year_birthday = resultSet.getInt("year_of_birth");
+
+                author = new Author(id, name, year_birthday);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return author;
     }
 
     public ResultSet getData(String sql) {

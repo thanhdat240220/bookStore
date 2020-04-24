@@ -44,32 +44,35 @@ public class AuthorController extends BaseController {
             switch (choice) {
                 case 1:
                     //add();
-                    System.out.println("Add a New Author".toUpperCase());
+                    System.out.println("    Add a New Author".toUpperCase());
                     Author author = new Author();
                     String name = enterString("Name");
                     author.setName(name);
                     int yearOfBirth = enterNumber("Year of Birth");
                     author.setYear_birthday(yearOfBirth);
-                    daoAuthor.addAuthor(author);
+                    if (daoAuthor.checkDuplicateAuthor().name.equals(name) && daoAuthor.checkDuplicateAuthor().year_birthday == yearOfBirth) {
+                        System.out.println("Author already existed!");
+                    } else {
+                        daoAuthor.addAuthor(author);
+                    }
                     break;
                 case 2:
                     //edit();
-                    System.out.println("Edit an Author".toUpperCase());
+                    System.out.println("    Edit an Author".toUpperCase());
                     Author authorToEdit = new Author();
                     int idToEdit = enterNumber("ID to Edit");
 
                     while (true) {
                         if (daoAuthor.checkExistedAuthor(idToEdit).equals("")) {
-                            System.out.println("No Author exist! Please try again!");
+                            System.out.println("Author not Found! Please try again!");
                             idToEdit = enterNumber("ID to Edit");
                         } else {
                             authorToEdit.setId(idToEdit);
                             String nameToEdit = enterString("New Name");
                             authorToEdit.setName(nameToEdit);
-                            makeMenuFooter();
+
                             int yearOfBirthToEdit = enterNumber("New Year of Birth");
                             authorToEdit.setYear_birthday(yearOfBirthToEdit);
-                            makeMenuFooter();
 
                             daoAuthor.editAuthor(authorToEdit);
                             break;
@@ -78,19 +81,19 @@ public class AuthorController extends BaseController {
                     break;
                 case 3:
                     //delete();
-                    System.out.println("Delete an Author".toUpperCase());
+                    System.out.println("    Delete an Author".toUpperCase());
                     int idToDelete = enterNumber("ID to Delete");
                     daoAuthor.removeAuthor(idToDelete);
                     break;
                 case 4:
                     //showDetailById();
-                    System.out.println("Show an Author by ID".toUpperCase());
+                    System.out.println("    Show an Author by ID".toUpperCase());
                     int idToShow = enterNumber("ID to Show");
                     daoAuthor.showAnAuthor(idToShow);
                     break;
                 case 5:
 //                    Author authorToShowAll = new Author();
-                    System.out.println("Show all Author".toUpperCase());
+                    System.out.println("    Show all Author".toUpperCase());
                     daoAuthor.showAllAuthor();
                     break;
                 case 6:

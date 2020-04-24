@@ -21,6 +21,11 @@ public class Book {
     public int quantity;
     public String size;
 
+    public Book() {
+
+    }
+
+
     public void setName(String name) {
         this.name = name;
     }

@@ -1,11 +1,11 @@
 package entity;
 
 import model.Book;
+import model.Category;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DAOProduct {
     Connection connection;
@@ -44,7 +44,7 @@ public class DAOProduct {
     public int editProduct(Book book) {
         int n = 0;
         String sql = "UPDATE book SET category_id=?, status_id=?, author_id=?, name=?, content_summary=?, " +
-                "publish_year=?, price,quantity=?, size=?, [weight]=? WHERE id=?";
+                "publish_year=?, price=?,quantity=?, size=?, [weight]=? WHERE id=?";
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -61,7 +61,7 @@ public class DAOProduct {
             preparedStatement.setInt(11, book.getId());
 
             n = preparedStatement.executeUpdate();
-
+            System.out.println("Edited successfully!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -82,4 +82,60 @@ public class DAOProduct {
 
         return n;
     }
+
+    public String checkExistBook(int id) {
+        String sql = "SELECT * FROM book WHERE id=" + id;
+        String strToCheck = "";
+
+        try {
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+//                int idToCheck = resultSet.getInt("id");
+                resultSet.getString("name");
+                strToCheck = resultSet.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return strToCheck;
+    }
+
+    public List<Integer> checkBookCategory() {
+        String sql = "SELECT id FROM category";
+        List<Integer> categoryIdToCheck = new ArrayList<>();
+
+        Statement statement = null;
+        try {
+            statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultSet = statement.executeQuery(sql);
+            
+            while (resultSet.next()) {
+                categoryIdToCheck.add(resultSet.getInt("id"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return categoryIdToCheck;
+    }
+
+    public int addCategory(Category category) {
+        int n = 0;
+        String sql = "INSERT INTO category(name) VALUES (?)";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, category.getName());
+
+            n = preparedStatement.executeUpdate();
+            System.out.println("Added category successfully!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return n;
+    }
+
 }

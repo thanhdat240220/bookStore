@@ -6,6 +6,7 @@
 package controller;
 
 import entity.DAOProduct;
+import model.Book;
 
 import java.sql.Connection;
 
@@ -42,12 +43,87 @@ public class ProductController extends BaseController {
             switch (choice) {
                 case 1:
                     //add();
+                    System.out.println("    Add a New Book".toUpperCase());
+                    Book book = new Book();
+                    int categoryId = enterNumber("Category ID");
+
+                    while (true) {
+                        if (!daoProduct.checkBookCategory().contains(categoryId)) {
+                            System.out.println("No Category exist! Please try again!");
+                            categoryId = enterNumber("Category ID");
+                        } else {
+                            book.setCategory_id(categoryId);
+                            int statusId = enterNumber("Status ID");
+                            book.setStatus_id(statusId);
+                            int authorId = enterNumber("Author ID");
+                            book.setAuthor_id(authorId);
+                            String name = enterString("Book Name");
+                            book.setName(name);
+                            String contentSummary = enterString("Content Summery");
+                            book.setContent_summary(contentSummary);
+                            int publishYear = enterNumber("Publish Year");
+                            book.setPublish_year(publishYear);
+                            double price = enterRealNumber("Price");
+                            book.setPrice(price);
+                            int quantity = enterNumber("Quantity");
+                            book.setQuantity(quantity);
+                            String size = enterString("Book Size");
+                            book.setSize(size);
+                            String weight = enterString("Book Weight");
+                            book.setWeight(weight);
+
+                            daoProduct.addProduct(book);
+                            System.out.println("Added successfully!");
+                            break;
+                        }
+                    }
                     break;
                 case 2:
                     //edit();
+                    System.out.println("    Edit a Book".toUpperCase());
+                    Book bookToEdit = new Book();
+                    int idToEdit = enterNumber("ID to Edit");
+
+                    while (true) {
+                        if (daoProduct.checkExistBook(idToEdit).equals("")) {
+                            System.out.println("No Book Found! Please try again!");
+                            idToEdit = enterNumber("ID to Edit");
+                        } else {
+                            bookToEdit.setId(idToEdit);
+                            int categoryIdToEdit = enterNumber("New Category ID");
+
+
+
+                            bookToEdit.setCategory_id(categoryIdToEdit);
+                            int statusIdToEdit = enterNumber("New Status ID");
+                            bookToEdit.setStatus_id(statusIdToEdit);
+                            int authorIdToEdit = enterNumber("New Author ID");
+                            bookToEdit.setAuthor_id(authorIdToEdit);
+                            String nameToEdit = enterString("New Book Name");
+                            bookToEdit.setName(nameToEdit);
+                            String contentSummaryToEdit = enterString("New Content Summery");
+                            bookToEdit.setContent_summary(contentSummaryToEdit);
+                            int publishYearToEdit = enterNumber("New Publish Year");
+                            bookToEdit.setPublish_year(publishYearToEdit);
+                            double priceToEdit = enterRealNumber("New Price");
+                            bookToEdit.setPrice(priceToEdit);
+                            int quantityToEdit = enterNumber("New Quantity");
+                            bookToEdit.setQuantity(quantityToEdit);
+                            String sizeToEdit = enterString("New Book Size");
+                            bookToEdit.setSize(sizeToEdit);
+                            String weightToEdit = enterString("New Book Weight");
+                            bookToEdit.setWeight(weightToEdit);
+
+                            daoProduct.editProduct(bookToEdit);
+                            break;
+                        }
+                    }
                     break;
                 case 3:
                     //delete();
+                    System.out.println("    Delete a Book".toUpperCase());
+                    int idToDelete = enterNumber("ID to Delete");
+                    daoProduct.removeProduct(idToDelete);
                     break;
                 case 4:
                     //showDetailById();
