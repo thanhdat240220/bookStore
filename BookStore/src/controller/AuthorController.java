@@ -83,7 +83,16 @@ public class AuthorController extends BaseController {
                     //delete();
                     System.out.println("    Delete an Author".toUpperCase());
                     int idToDelete = enterNumber("ID to Delete");
-                    daoAuthor.removeAuthor(idToDelete);
+
+                    while (true) {
+                        if (daoAuthor.checkExistedAuthor(idToDelete).equals("")) {
+                            System.out.println("Author not Found! Please try again!");
+                            idToDelete = enterNumber("ID to Delete");
+                        } else {
+                            daoAuthor.removeAuthor(idToDelete);
+                            break;
+                        }
+                    }
                     break;
                 case 4:
                     //showDetailById();
@@ -93,7 +102,7 @@ public class AuthorController extends BaseController {
                     break;
                 case 5:
 //                    Author authorToShowAll = new Author();
-                    System.out.println("    Show all Author".toUpperCase());
+                    System.out.println("    Show all Authors".toUpperCase());
                     daoAuthor.showAllAuthor();
                     break;
                 case 6:

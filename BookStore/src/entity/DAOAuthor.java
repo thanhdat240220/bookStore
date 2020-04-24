@@ -58,12 +58,9 @@ public class DAOAuthor {
         String sql = "DELETE FROM author WHERE id=" + id;
         try {
             Statement statement = connection.createStatement();
-            if (!checkExistedAuthor(id).equals("")) {
-                n = statement.executeUpdate(sql);
-                System.out.println("Deleted successfully!");
-            } else {
-                System.out.println("Author not Found! Please try again!");
-            }
+
+            n = statement.executeUpdate(sql);
+            System.out.println("Deleted successfully!");
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -29,7 +29,7 @@ public class ProductController extends BaseController {
         makeMenuRow("   1.Add Product");
         makeMenuRow("   2.Edit Product");
         makeMenuRow("   3.Delete Product");
-        makeMenuRow("   4.Watch Product Detail");
+        makeMenuRow("   4.Watch Product Detail By ID");
         makeMenuRow("   5.Show all Products");
         makeMenuRow("   6.Back to previous page");
         makeMenuFooter();
@@ -49,7 +49,7 @@ public class ProductController extends BaseController {
 
                     while (true) {
                         if (!daoProduct.checkBookCategory().contains(categoryId)) {
-                            System.out.println("No Category exist! Please try again!");
+                            System.out.println("Category not Found! Please try again!");
                             categoryId = enterNumber("Category ID");
                         } else {
                             book.setCategory_id(categoryId);
@@ -86,35 +86,40 @@ public class ProductController extends BaseController {
 
                     while (true) {
                         if (daoProduct.checkExistBook(idToEdit).equals("")) {
-                            System.out.println("No Book Found! Please try again!");
+                            System.out.println("Book not Found! Please try again!");
                             idToEdit = enterNumber("ID to Edit");
                         } else {
                             bookToEdit.setId(idToEdit);
                             int categoryIdToEdit = enterNumber("New Category ID");
 
-
-
-                            bookToEdit.setCategory_id(categoryIdToEdit);
-                            int statusIdToEdit = enterNumber("New Status ID");
-                            bookToEdit.setStatus_id(statusIdToEdit);
-                            int authorIdToEdit = enterNumber("New Author ID");
-                            bookToEdit.setAuthor_id(authorIdToEdit);
-                            String nameToEdit = enterString("New Book Name");
-                            bookToEdit.setName(nameToEdit);
-                            String contentSummaryToEdit = enterString("New Content Summery");
-                            bookToEdit.setContent_summary(contentSummaryToEdit);
-                            int publishYearToEdit = enterNumber("New Publish Year");
-                            bookToEdit.setPublish_year(publishYearToEdit);
-                            double priceToEdit = enterRealNumber("New Price");
-                            bookToEdit.setPrice(priceToEdit);
-                            int quantityToEdit = enterNumber("New Quantity");
-                            bookToEdit.setQuantity(quantityToEdit);
-                            String sizeToEdit = enterString("New Book Size");
-                            bookToEdit.setSize(sizeToEdit);
-                            String weightToEdit = enterString("New Book Weight");
-                            bookToEdit.setWeight(weightToEdit);
-
-                            daoProduct.editProduct(bookToEdit);
+                            while (true) {
+                                if (!daoProduct.checkBookCategory().contains(categoryIdToEdit)) {
+                                    System.out.println("Category not Found! Please try again!");
+                                    categoryIdToEdit = enterNumber("Category ID");
+                                } else {
+                                    bookToEdit.setCategory_id(categoryIdToEdit);
+                                    int statusIdToEdit = enterNumber("New Status ID");
+                                    bookToEdit.setStatus_id(statusIdToEdit);
+                                    int authorIdToEdit = enterNumber("New Author ID");
+                                    bookToEdit.setAuthor_id(authorIdToEdit);
+                                    String nameToEdit = enterString("New Book Name");
+                                    bookToEdit.setName(nameToEdit);
+                                    String contentSummaryToEdit = enterString("New Content Summery");
+                                    bookToEdit.setContent_summary(contentSummaryToEdit);
+                                    int publishYearToEdit = enterNumber("New Publish Year");
+                                    bookToEdit.setPublish_year(publishYearToEdit);
+                                    double priceToEdit = enterRealNumber("New Price");
+                                    bookToEdit.setPrice(priceToEdit);
+                                    int quantityToEdit = enterNumber("New Quantity");
+                                    bookToEdit.setQuantity(quantityToEdit);
+                                    String sizeToEdit = enterString("New Book Size");
+                                    bookToEdit.setSize(sizeToEdit);
+                                    String weightToEdit = enterString("New Book Weight");
+                                    bookToEdit.setWeight(weightToEdit);
+                                    daoProduct.editProduct(bookToEdit);
+                                    break;
+                                }
+                            }
                             break;
                         }
                     }
@@ -123,13 +128,26 @@ public class ProductController extends BaseController {
                     //delete();
                     System.out.println("    Delete a Book".toUpperCase());
                     int idToDelete = enterNumber("ID to Delete");
-                    daoProduct.removeProduct(idToDelete);
+                    while (true) {
+                        if (daoProduct.checkExistBook(idToDelete).equals("")) {
+                            System.out.println("Book not Found! Please try again!");
+                            idToDelete = enterNumber("ID to Delete");
+                        } else {
+                            daoProduct.removeProduct(idToDelete);
+                            break;
+                        }
+                    }
                     break;
                 case 4:
                     //showDetailById();
+                    System.out.println("    Show a Book by ID".toUpperCase());
+                    int idToShow = enterNumber("ID to Show");
+                    daoProduct.showABook(idToShow);
                     break;
                 case 5:
                     //clearConsole();
+                    System.out.println("    Show all Books".toUpperCase());
+                    daoProduct.showAllBook();
                     break;
                 case 6:
                     break;

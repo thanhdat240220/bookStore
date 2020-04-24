@@ -76,11 +76,76 @@ public class DAOProduct {
         try {
             Statement statement = connection.createStatement();
             n = statement.executeUpdate(sql);
+            System.out.println("Delete successfully!");
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return n;
+    }
+
+    public void showABook(int idToShow) {
+        String sql = "SELECT * FROM book WHERE id=" + idToShow;
+        Statement statement;
+
+        try {
+            statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+            if (!checkExistBook(idToShow).equals("")) {
+                ResultSet resultSet = statement.executeQuery(sql);
+
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    int categoryId = resultSet.getInt("category_id");
+                    int statusId = resultSet.getInt("status_id");
+                    int authorId = resultSet.getInt("author_id");
+                    String name = resultSet.getString("name");
+                    String contentSummary = resultSet.getString("content_summary");
+                    int publishYear = resultSet.getInt("publish_year");
+                    double price = resultSet.getDouble("price");
+                    int quantity = resultSet.getInt("quantity");
+                    String size = resultSet.getString("size");
+                    String weight = resultSet.getString("weight");
+
+                    System.out.println("ID: " + id + "\t | \t Category ID: " + categoryId + "\t | \t Status ID: " + statusId + "\t | \t Author ID: " + authorId + "\t | \t Name: " + name + "\t | \t Content Summary: " + contentSummary + "\t | \t Publish Year: " + publishYear + "\t | \t Price: " + price + "\t | \t Quantity: " + quantity + "\t | \t Size: " + size + "\t | \t Weight: " + weight);
+                }
+            } else {
+                System.out.println("Book not Found!");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void showAllBook() {
+        String sql = "SELECT * FROM book";
+        Statement statement;
+
+        try {
+            statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                int categoryId = resultSet.getInt("category_id");
+                int statusId = resultSet.getInt("status_id");
+                int authorId = resultSet.getInt("author_id");
+                String name = resultSet.getString("name");
+                String contentSummary = resultSet.getString("content_summary");
+                int publishYear = resultSet.getInt("publish_year");
+                double price = resultSet.getDouble("price");
+                int quantity = resultSet.getInt("quantity");
+                String size = resultSet.getString("size");
+                String weight = resultSet.getString("weight");
+
+                System.out.println("ID: " + id + "\t | \t Category ID: " + categoryId + "\t | \t Status ID: " + statusId + "\t | \t Author ID: " + authorId + "\t | \t Name: " + name + "\t | \t Content Summary: " + contentSummary + "\t | \t Publish Year: " + publishYear + "\t | \t Price: " + price + "\t | \t Quantity: " + quantity + "\t | \t Size: " + size + "\t | \t Weight: " + weight);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public String checkExistBook(int id) {
@@ -110,7 +175,7 @@ public class DAOProduct {
         try {
             statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet resultSet = statement.executeQuery(sql);
-            
+
             while (resultSet.next()) {
                 categoryIdToCheck.add(resultSet.getInt("id"));
             }
