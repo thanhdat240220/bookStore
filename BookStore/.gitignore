@@ -1,4 +1,5 @@
 .idea/
 .out/production/bookStore/
-.BookStore/.idea/
-.BookStore/./out/production/bookStore/
+../BookStore/.idea/
+../out/
+../BookStore/
