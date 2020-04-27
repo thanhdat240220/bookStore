@@ -25,6 +25,20 @@ public class Book {
 
     }
 
+    public Book(int id, int categoryId, int statusId, int authorId, String name, String contentSummary, int publishYear, double price, int quantity, String size, String weight) {
+        this.Id = id;
+        this.category_id = categoryId;
+        this.author_id = authorId;
+        this.name = name;
+        this.content_summary = contentSummary;
+        this.status_id = statusId;
+        this.publish_year = publishYear;
+        this.price = price;
+        this.quantity = quantity;
+        this.size = size;
+        this.weight = weight;
+    }
+
 
     public void setName(String name) {
         this.name = name;

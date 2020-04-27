@@ -27,7 +27,7 @@ public class BookStore {
         BaseController _baseController = new BaseController(conn);
         HomeController _homeController = new HomeController(conn);
         ProductController _productController = new ProductController(conn);
-//        UserController _userController = new UserController(conn);
+        UserController _userController = new UserController(conn);
 //        OrderController _orderController = new OrderController(conn);
         AdminManager _adminManager = new AdminManager(conn);
         
@@ -42,6 +42,8 @@ public class BookStore {
                     break;
                 case 2:
                     //_homeController.manageMenu();
+                    // search by name and category
+                    _homeController.menu();
                     break;
                 case 3:
                     //_quickSearchManager.showMenu();

@@ -6,6 +6,7 @@ import model.Category;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class DAOProduct {
     Connection connection;
@@ -201,6 +202,85 @@ public class DAOProduct {
         }
 
         return n;
+    }
+
+    public Vector<Book> searchByName(String nameToSearch) {
+        Vector<Book> vector = new Vector<Book>();
+        String sql = "SELECT * FROM book WHERE name LIKE '%" + nameToSearch + "%'";
+
+        ResultSet resultSet = getData(sql);
+
+        try {
+            while (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    int categoryId = resultSet.getInt("category_id");
+                    int statusId = resultSet.getInt("status_id");
+                    int authorId = resultSet.getInt("author_id");
+                    String name = resultSet.getString("name");
+                    String contentSummary = resultSet.getString("content_summary");
+                    int publishYear = resultSet.getInt("publish_year");
+                    double price = resultSet.getDouble("price");
+                    int quantity = resultSet.getInt("quantity");
+                    String size = resultSet.getString("size");
+                    String weight = resultSet.getString("weight");
+
+                    Book book = new Book(id, categoryId, statusId, authorId, name, contentSummary, publishYear, price
+                            , quantity, size, weight);
+
+                    vector.add(book);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return vector;
+    }
+
+    public String getCategory(int id) {
+        String sql = "SELECT * FROM category WHERE id = " + id;
+        String category = "";
+        try {
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                category = resultSet.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return category;
+    }
+
+    public String getAuthorName(int id) {
+        String sql = "SELECT * FROM author WHERE id = " + id;
+        String authorName = "";
+        try {
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                authorName = resultSet.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return authorName;
+    }
+
+    public ResultSet getData(String sql) {
+        ResultSet resultSet = null;
+
+        try {
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            resultSet = statement.executeQuery(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resultSet;
     }
 
 }
