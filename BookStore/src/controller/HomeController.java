@@ -60,6 +60,25 @@ public class HomeController extends BaseController {
                     }
                     break;
                 case 2:
+                    System.out.println("    Filter Book by Category".toUpperCase());
+                    String typeToFilter = enterString("type to search");
+                    Vector<Book> vectorToFilter = daoProduct.filterByType(typeToFilter);
+
+                    for (Book book : vectorToFilter) {
+                        String name = book.getName();
+                        String category = daoProduct.getCategory(book.getCategory_id());
+                        String author = daoProduct.getAuthorName(book.getAuthor_id());
+                        String contentSummary = book.getContent_summary();
+                        int publishYear = book.getPublish_year();
+                        double price = book.getPrice();
+                        int quantity = book.getQuantity();
+                        String size = book.getSize();
+                        String weight = book.getWeight();
+
+                        System.out.println("Name: " + name + "\t | \t Type: " + category + "\t | \t Author: " + author + "\t | \t Content Summary: " + contentSummary + "\t | \t Publish Year: " + publishYear + "\t | \t Price: " + price + "\t | \t Quantity: " + quantity + "\t | \t Size: " + size + "\t | \t Weight: " + weight);
+                        System.out.println("                -----------------------");
+
+                    }
                     break;
                 case 3:
                     //_billManager.manageMenu();

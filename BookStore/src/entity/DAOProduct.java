@@ -236,6 +236,56 @@ public class DAOProduct {
         return vector;
     }
 
+    public int getCategoryID(String categoryName) {
+        String sql = "SELECT * FROM category WHERE name = '" + categoryName + "'";
+        int categoryID = 0;
+        try {
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                categoryID = resultSet.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return categoryID;
+    }
+
+    public Vector<Book> filterByType(String categoryName) {
+        Vector<Book> vector = new Vector<Book>();
+
+        String sql = "SELECT * FROM book WHERE category_id = " + getCategoryID(categoryName);
+        ResultSet resultSet = getData(sql);
+
+        try {
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                int categoryId = resultSet.getInt("category_id");
+                int statusId = resultSet.getInt("status_id");
+                int authorId = resultSet.getInt("author_id");
+                String name = resultSet.getString("name");
+                String contentSummary = resultSet.getString("content_summary");
+                int publishYear = resultSet.getInt("publish_year");
+                double price = resultSet.getDouble("price");
+                int quantity = resultSet.getInt("quantity");
+                String size = resultSet.getString("size");
+                String weight = resultSet.getString("weight");
+
+                Book book = new Book(id, categoryId, statusId, authorId, name, contentSummary, publishYear, price
+                        , quantity, size, weight);
+
+                vector.add(book);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return vector;
+
+    }
+
     public String getCategory(int id) {
         String sql = "SELECT * FROM category WHERE id = " + id;
         String category = "";
