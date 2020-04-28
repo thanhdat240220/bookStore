@@ -89,30 +89,19 @@ public class DAOProduct {
         String sql = "SELECT * FROM book WHERE id=" + idToShow;
         Statement statement;
 
+
+
         try {
-            statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+//            statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
-            if (!checkExistBook(idToShow).equals("")) {
-                ResultSet resultSet = statement.executeQuery(sql);
+//            if (!checkExistBook(idToShow).equals("")) {
+//                ResultSet resultSet = statement.executeQuery(sql);
+                ResultSet resultSet = getData(sql);
 
-                while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    int categoryId = resultSet.getInt("category_id");
-                    int statusId = resultSet.getInt("status_id");
-                    int authorId = resultSet.getInt("author_id");
-                    String name = resultSet.getString("name");
-                    String contentSummary = resultSet.getString("content_summary");
-                    int publishYear = resultSet.getInt("publish_year");
-                    double price = resultSet.getDouble("price");
-                    int quantity = resultSet.getInt("quantity");
-                    String size = resultSet.getString("size");
-                    String weight = resultSet.getString("weight");
-
-                    System.out.println("ID: " + id + "\t | \t Category ID: " + categoryId + "\t | \t Status ID: " + statusId + "\t | \t Author ID: " + authorId + "\t | \t Name: " + name + "\t | \t Content Summary: " + contentSummary + "\t | \t Publish Year: " + publishYear + "\t | \t Price: " + price + "\t | \t Quantity: " + quantity + "\t | \t Size: " + size + "\t | \t Weight: " + weight);
-                }
-            } else {
-                System.out.println("Book not Found!");
-            }
+                showBook(resultSet);
+//            } else {
+//                System.out.println("Book not Found!");
+//            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -120,42 +109,67 @@ public class DAOProduct {
 
     }
 
+    // display all books
     public void showAllBook() {
         String sql = "SELECT * FROM book";
-        Statement statement;
+//        Statement statement;
+        ResultSet resultSet = getData(sql);
 
         try {
-            statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            ResultSet resultSet = statement.executeQuery(sql);
+//            statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+//            ResultSet resultSet = statement.executeQuery(sql);
 
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                int categoryId = resultSet.getInt("category_id");
-                int statusId = resultSet.getInt("status_id");
-                int authorId = resultSet.getInt("author_id");
-                String name = resultSet.getString("name");
-                String contentSummary = resultSet.getString("content_summary");
-                int publishYear = resultSet.getInt("publish_year");
-                double price = resultSet.getDouble("price");
-                int quantity = resultSet.getInt("quantity");
-                String size = resultSet.getString("size");
-                String weight = resultSet.getString("weight");
-
-                System.out.println("ID: " + id + "\t | \t Category ID: " + categoryId + "\t | \t Status ID: " + statusId + "\t | \t Author ID: " + authorId + "\t | \t Name: " + name + "\t | \t Content Summary: " + contentSummary + "\t | \t Publish Year: " + publishYear + "\t | \t Price: " + price + "\t | \t Quantity: " + quantity + "\t | \t Size: " + size + "\t | \t Weight: " + weight);
-            }
+            showBook(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
     }
 
+    // get books from database - extracted method
+    private void showBook(ResultSet resultSet) throws SQLException {
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            int categoryId = resultSet.getInt("category_id");
+            int statusId = resultSet.getInt("status_id");
+            int authorId = resultSet.getInt("author_id");
+            String name = resultSet.getString("name");
+            String contentSummary = resultSet.getString("content_summary");
+            int publishYear = resultSet.getInt("publish_year");
+            double price = resultSet.getDouble("price");
+            int quantity = resultSet.getInt("quantity");
+            String size = resultSet.getString("size");
+            String weight = resultSet.getString("weight");
+
+            System.out.println("ID: " + id + "\t | \t Category ID: " + categoryId + "\t | \t Status ID: " + statusId + "\t | \t Author ID: " + authorId + "\t | \t Name: " + name + "\t | \t Content Summary: " + contentSummary + "\t | \t Publish Year: " + publishYear + "\t | \t Price: " + price + "\t | \t Quantity: " + quantity + "\t | \t Size: " + size + "\t | \t Weight: " + weight);
+        }
+    }
+
+    // check existed book by id
     public String checkExistBook(int id) {
         String sql = "SELECT * FROM book WHERE id=" + id;
+        return getStringCheckBook(sql);
+    }
+
+    // check existed book by name
+    public String checkExistBookByName(String name) {
+        String sql = "SELECT * FROM book WHERE name='" + name + "'";
+        return getStringCheckBook(sql);
+    }
+
+    public String checkExistCategory(String name) {
+        String sql = "SELECT * FROM category WHERE name='" + name + "'";
+        return getStringCheckBook(sql);
+    }
+
+    // get book name from database - extracted method
+    private String getStringCheckBook(String sql) {
         String strToCheck = "";
+        ResultSet resultSet = getData(sql);
 
         try {
-            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet resultSet = statement.executeQuery(sql);
+//            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+//            ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
 //                int idToCheck = resultSet.getInt("id");
@@ -168,14 +182,17 @@ public class DAOProduct {
         return strToCheck;
     }
 
+    // display category id from database
     public List<Integer> checkBookCategory() {
         String sql = "SELECT id FROM category";
         List<Integer> categoryIdToCheck = new ArrayList<>();
 
-        Statement statement = null;
+//        Statement statement = null;
+
+        ResultSet resultSet = getData(sql);
         try {
-            statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet resultSet = statement.executeQuery(sql);
+//            statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+//            ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
                 categoryIdToCheck.add(resultSet.getInt("id"));
@@ -187,6 +204,7 @@ public class DAOProduct {
         return categoryIdToCheck;
     }
 
+    // add a new category
     public int addCategory(Category category) {
         int n = 0;
         String sql = "INSERT INTO category(name) VALUES (?)";
@@ -204,44 +222,23 @@ public class DAOProduct {
         return n;
     }
 
+    // search book by it's name
     public Vector<Book> searchByName(String nameToSearch) {
         Vector<Book> vector = new Vector<Book>();
         String sql = "SELECT * FROM book WHERE name LIKE '%" + nameToSearch + "%'";
 
-        ResultSet resultSet = getData(sql);
-
-        try {
-            while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    int categoryId = resultSet.getInt("category_id");
-                    int statusId = resultSet.getInt("status_id");
-                    int authorId = resultSet.getInt("author_id");
-                    String name = resultSet.getString("name");
-                    String contentSummary = resultSet.getString("content_summary");
-                    int publishYear = resultSet.getInt("publish_year");
-                    double price = resultSet.getDouble("price");
-                    int quantity = resultSet.getInt("quantity");
-                    String size = resultSet.getString("size");
-                    String weight = resultSet.getString("weight");
-
-                    Book book = new Book(id, categoryId, statusId, authorId, name, contentSummary, publishYear, price
-                            , quantity, size, weight);
-
-                    vector.add(book);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return vector;
+        return getBooks(vector, sql);
     }
 
+    // get category name by it's id
     public int getCategoryID(String categoryName) {
         String sql = "SELECT * FROM category WHERE name = '" + categoryName + "'";
         int categoryID = 0;
+
+        ResultSet resultSet = getData(sql);
         try {
-            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            ResultSet resultSet = statement.executeQuery(sql);
+//            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+//            ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
                 categoryID = resultSet.getInt("id");
@@ -253,10 +250,17 @@ public class DAOProduct {
         return categoryID;
     }
 
+    // filter books by their category
     public Vector<Book> filterByType(String categoryName) {
         Vector<Book> vector = new Vector<Book>();
 
         String sql = "SELECT * FROM book WHERE category_id = " + getCategoryID(categoryName);
+        return getBooks(vector, sql);
+
+    }
+
+    // get a vector of books from database
+    private Vector<Book> getBooks(Vector<Book> vector, String sql) {
         ResultSet resultSet = getData(sql);
 
         try {
@@ -283,32 +287,29 @@ public class DAOProduct {
         }
 
         return vector;
-
     }
 
+
+
+    // get category name by id
     public String getCategory(int id) {
         String sql = "SELECT * FROM category WHERE id = " + id;
-        String category = "";
-        try {
-            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet resultSet = statement.executeQuery(sql);
-
-            while (resultSet.next()) {
-                category = resultSet.getString("name");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return category;
+        return getString(sql);
     }
 
+    // get author name by id
     public String getAuthorName(int id) {
         String sql = "SELECT * FROM author WHERE id = " + id;
+        return getString(sql);
+    }
+
+    // get name by id - extracted method (category and author are used)
+    private String getString(String sql) {
         String authorName = "";
+        ResultSet resultSet = getData(sql);
         try {
-            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet resultSet = statement.executeQuery(sql);
+//            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+//            ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
                 authorName = resultSet.getString("name");
@@ -320,6 +321,7 @@ public class DAOProduct {
         return authorName;
     }
 
+    // get data from sql server
     public ResultSet getData(String sql) {
         ResultSet resultSet = null;
 

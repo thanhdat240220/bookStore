@@ -43,20 +43,10 @@ public class HomeController extends BaseController {
                     String nameToSearch = enterString("name to search");
                     Vector<Book> vector = daoProduct.searchByName(nameToSearch);
 
-                    for (Book book : vector) {
-                        String name = book.getName();
-                        String category = daoProduct.getCategory(book.getCategory_id());
-                        String author = daoProduct.getAuthorName(book.getAuthor_id());
-                        String contentSummary = book.getContent_summary();
-                        int publishYear = book.getPublish_year();
-                        double price = book.getPrice();
-                        int quantity = book.getQuantity();
-                        String size = book.getSize();
-                        String weight = book.getWeight();
-
-                        System.out.println("Name: " + name + "\t | \t Type: " + category + "\t | \t Author: " + author + "\t | \t Content Summary: " + contentSummary + "\t | \t Publish Year: " + publishYear + "\t | \t Price: " + price + "\t | \t Quantity: " + quantity + "\t | \t Size: " + size + "\t | \t Weight: " + weight);
-                        System.out.println("                -----------------------");
-
+                    if (daoProduct.checkExistBookByName(nameToSearch).equals("")) {
+                        System.out.println("Book not Found! Please try again!");
+                    } else {
+                        showBook(vector);
                     }
                     break;
                 case 2:
@@ -64,20 +54,10 @@ public class HomeController extends BaseController {
                     String typeToFilter = enterString("type to search");
                     Vector<Book> vectorToFilter = daoProduct.filterByType(typeToFilter);
 
-                    for (Book book : vectorToFilter) {
-                        String name = book.getName();
-                        String category = daoProduct.getCategory(book.getCategory_id());
-                        String author = daoProduct.getAuthorName(book.getAuthor_id());
-                        String contentSummary = book.getContent_summary();
-                        int publishYear = book.getPublish_year();
-                        double price = book.getPrice();
-                        int quantity = book.getQuantity();
-                        String size = book.getSize();
-                        String weight = book.getWeight();
-
-                        System.out.println("Name: " + name + "\t | \t Type: " + category + "\t | \t Author: " + author + "\t | \t Content Summary: " + contentSummary + "\t | \t Publish Year: " + publishYear + "\t | \t Price: " + price + "\t | \t Quantity: " + quantity + "\t | \t Size: " + size + "\t | \t Weight: " + weight);
-                        System.out.println("                -----------------------");
-
+                    if (daoProduct.checkExistCategory(typeToFilter).equals("")) {
+                        System.out.println("No Book or Category Found! Please try again!");
+                    } else {
+                        showBook(vectorToFilter);
                     }
                     break;
                 case 3:
@@ -92,6 +72,24 @@ public class HomeController extends BaseController {
                     break;
             }
         } while (choice != 6);
+    }
+
+    private void showBook(Vector<Book> vector) {
+        for (Book book : vector) {
+            String name = book.getName();
+            String category = daoProduct.getCategory(book.getCategory_id());
+            String author = daoProduct.getAuthorName(book.getAuthor_id());
+            String contentSummary = book.getContent_summary();
+            int publishYear = book.getPublish_year();
+            double price = book.getPrice();
+            int quantity = book.getQuantity();
+            String size = book.getSize();
+            String weight = book.getWeight();
+
+            System.out.println("Name: " + name + "\t | \t Type: " + category + "\t | \t Author: " + author + "\t | \t Content Summary: " + contentSummary + "\t | \t Publish Year: " + publishYear + "\t | \t Price: " + price + "\t | \t Quantity: " + quantity + "\t | \t Size: " + size + "\t | \t Weight: " + weight);
+            System.out.println("                -----------------------");
+
+        }
     }
 
 }

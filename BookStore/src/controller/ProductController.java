@@ -116,6 +116,7 @@ public class ProductController extends BaseController {
                                     bookToEdit.setSize(sizeToEdit);
                                     String weightToEdit = enterString("New Book Weight");
                                     bookToEdit.setWeight(weightToEdit);
+
                                     daoProduct.editProduct(bookToEdit);
                                     break;
                                 }
@@ -142,7 +143,11 @@ public class ProductController extends BaseController {
                     //showDetailById();
                     System.out.println("    Show a Book by ID".toUpperCase());
                     int idToShow = enterNumber("ID to Show");
-                    daoProduct.showABook(idToShow);
+                    if (daoProduct.checkExistBook(idToShow).equals("")) {
+                        System.out.println("Book not Found!");
+                    } else {
+                        daoProduct.showABook(idToShow);
+                    }
                     break;
                 case 5:
                     //clearConsole();
