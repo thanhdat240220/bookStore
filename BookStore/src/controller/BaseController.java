@@ -35,12 +35,9 @@ public class BaseController {
 
     public void showMainMenu() {
         makeMenuHeader("BOOK STORE");
-        makeMenuRow("1. Login for User.");
-        makeMenuRow("2. Home.");
-        makeMenuRow("3. Quick search.");
-        makeMenuRow("4. Filter products.");
-        makeMenuRow("5. Admin System.");
-        makeMenuRow("5. Exit.");
+        makeMenuRow("1. Home.");
+        makeMenuRow("2. Admin System.");
+        makeMenuRow("3. Exit.");
         makeMenuFooter();
     }
 
@@ -61,7 +58,7 @@ public class BaseController {
         do {
             System.out.print("- Enter " + option + ":");
             choiceStr = scanner.nextLine();
-            if (isDouble(choiceStr)) {
+            if (isDouble(choiceStr) || Integer.parseInt(choiceStr) == 0) {
                 break;
             } else {
                 System.out.println("- " + option + " must be a positive number!");
@@ -70,6 +67,20 @@ public class BaseController {
         return (int) Double.parseDouble(choiceStr);
     }
 
+    public int enterInterger(String option) {
+        String choiceStr = "";
+        do {
+            System.out.print("- Enter " + option + ":");
+            choiceStr = scanner.nextLine();
+            if (isDouble(choiceStr)) {
+                break;
+            } else {
+                System.out.println("- " + option + " must be a positive number!");
+            }
+        } while (true);
+        return (int) Double.parseDouble(choiceStr);
+    }
+    
     public Double enterRealNumber(String option) {
         String choiceStr = "";
         do {

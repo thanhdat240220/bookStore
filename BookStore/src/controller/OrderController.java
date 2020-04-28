@@ -9,12 +9,16 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Employee;
 import model.Order;
 import model.OrderDetail;
+import viewmodel.Cart;
+import viewmodel.CartDetail;
 
 /**
  *
@@ -22,13 +26,15 @@ import model.OrderDetail;
  */
 public class OrderController extends BaseController {
 
-    protected Statement statement;
+    protected Statement _statement;
     protected Employee _employee;
+    private UserController _userController;
 
     public OrderController(Connection connect) {
         super(connect);
+        _userController = new UserController(connect);
         try {
-            statement = connect.createStatement();
+            _statement = connect.createStatement();
         } catch (SQLException ex) {
             Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -68,7 +74,7 @@ public class OrderController extends BaseController {
         int choice;
         do {
             makeMenuHeader("Undelivered Orders Management");
-            makeMenuRow("1. Order Detail");
+            makeMenuRow("1. Show Order Detail");
             makeMenuRow("2. Confirm And Delivering");
             makeMenuRow("3. Delete Order");
             makeMenuRow("4. Show All Unconfimred Orders");
@@ -102,7 +108,7 @@ public class OrderController extends BaseController {
         int choice;
         do {
             makeMenuHeader("Undelivered Orders Management");
-            makeMenuRow("1. Order Detail");
+            makeMenuRow("1. Show Order Detail");
             makeMenuRow("2. Delivered");
             makeMenuRow("3. Delete Order");
             makeMenuRow("4. Show All Unconfimred Orders");
@@ -136,7 +142,7 @@ public class OrderController extends BaseController {
         int choice;
         do {
             makeMenuHeader("Undelivered Orders Management");
-            makeMenuRow("1. Order Detail");
+            makeMenuRow("1. Show Order Detail");
             makeMenuRow("2. Delete Order");
             makeMenuRow("3. Show All Unconfimred Orders");
             makeMenuRow("4. Back to previous menu");
@@ -168,14 +174,16 @@ public class OrderController extends BaseController {
         if (orders.size() > 0) {
             Order order = orders.get(0);
             ArrayList<OrderDetail> orderDetails = getOrderDetails(OrderID);
-
+            // 
+            makeMenuHeader("Order Detail");
             makeRow("Order Id: " + order.getId());
             makeRow("Status Name: " + statusName(StatusId));
             makeRow("Received Address: " + (!Empty(order.getAddress_recieved()) ? order.getAddress_recieved() : ""));
             makeRow("Created Date: " + (order.getCreate_date() != null ? order.getCreate_date() : ""));
-            makeRow("Price: " + order.getOrder_price() + " VND");
+            makeRow("Price Total: " + order.getOrder_price() + " VND");
 
             for (OrderDetail orderDetail : orderDetails) {
+                makeRow("-------------------------------------------");
                 makeRow("- Book Name: " + orderDetail.book_name);
                 makeRow("- Quantity: " + orderDetail.quantity);
             }
@@ -189,8 +197,8 @@ public class OrderController extends BaseController {
         ArrayList<Order> orders = getOrders("Id=" + OrderID + " and status_id=" + StatusId);
         if (orders.size() > 0) {
             try {
-                String sql = "update orders set status_id = " + ++StatusId + " and employee_id=" + _employee.getId() + " where id=" + OrderID;
-                statement.executeUpdate(sql);
+                String sql = "update orders set status_id = " + ++StatusId + " ,employee_id=" + _employee.getId() + " where id=" + OrderID;
+                _statement.executeUpdate(sql);
                 makeRow("Update Success");
             } catch (SQLException ex) {
                 makeRow("Error System");
@@ -204,13 +212,14 @@ public class OrderController extends BaseController {
     public void ShowAllOrders(int StatusId) {
         ArrayList<Order> Orders = getOrders(" status_id=" + StatusId);
         if (Orders.size() > 0) {
+            makeMenuHeader("Order List");
             for (Order item : Orders) {
-                makeMenuRow("----------------------");
                 makeRow("Order Id: " + item.getId());
                 makeRow("Status Name: " + statusName(StatusId));
                 makeRow("Received Address: " + (!Empty(item.getAddress_recieved()) ? item.getAddress_recieved() : ""));
                 makeRow("Created Date: " + (item.getCreate_date() != null ? item.getCreate_date() : ""));
-                makeRow("Price: " + item.getOrder_price() + " VND");
+                makeRow("Price Total: " + item.getOrder_price() + " VND");
+                makeMenuRow("----------------------");
             }
         } else {
             makeRow("Empty Order");
@@ -222,7 +231,7 @@ public class OrderController extends BaseController {
         ArrayList<Order> orders = getOrders("Id=" + OrderID + " and status_id=" + StatusId);
         if (orders.size() > 0) {
             try {
-                statement.executeUpdate("delete from Orders where Id=" + OrderID);
+                _statement.executeUpdate("delete from Orders where Id=" + OrderID);
                 makeRow("Delete order successful!");
             } catch (SQLException ex) {
                 makeRow("Delete order fail!");
@@ -235,7 +244,7 @@ public class OrderController extends BaseController {
     public ArrayList<Order> getOrders(String where) {
         ArrayList<Order> orders = new ArrayList<Order>();
         try {
-            ResultSet rs = statement.executeQuery("select * "
+            ResultSet rs = _statement.executeQuery("select * "
                     + "from orders Where (1=1) And " + where);
             while (rs.next()) {
                 Order order = new Order();
@@ -256,7 +265,7 @@ public class OrderController extends BaseController {
     public ArrayList<OrderDetail> getOrderDetails(int OrderId) {
         ArrayList<OrderDetail> orderDetails = new ArrayList<OrderDetail>();
         try {
-            ResultSet rs = statement.executeQuery("select * "
+            ResultSet rs = _statement.executeQuery("select * "
                     + "from orderDetail od left join book b on b.id =od.book_id  Where order_id=" + OrderId);
             while (rs.next()) {
                 OrderDetail orderDetail = new OrderDetail();
@@ -271,6 +280,61 @@ public class OrderController extends BaseController {
         } catch (SQLException ex) {
         }
         return orderDetails;
+    }
+
+    public int saveOrderAnonymous(Cart cart, String Name, String address, String phone) {
+        int customer_id = 0;
+        int order_id = 0;
+        try {
+            ResultSet rs = _statement.executeQuery("INSERT INTO customer\n"
+                    + "(name, [_address], phone)\n"
+                    + "OUTPUT Inserted.id\n"
+                    + "VALUES('" + Name + "', '" + address + "', '" + phone + "') ;");
+            rs.next();
+            customer_id = rs.getInt("id");
+
+            rs = _statement.executeQuery("INSERT INTO book_store.dbo.orders\n"
+                    + "(customer_id, address_recieved, order_price, status_id)\n "
+                    + "OUTPUT Inserted.id \n"
+                    + "VALUES(" + customer_id + ", '" + address + "', " + cart.getTotalPrice() + ", 1);");
+            rs.next();
+            order_id = rs.getInt("Id");
+            for (CartDetail detail : cart.getDetails()) {
+                _statement.executeUpdate("INSERT INTO book_store.dbo.orderDetail\n"
+                        + "(order_id, book_id, quantity, price)\n"
+                        + "VALUES(" + order_id + ", " + detail.getBook().getId() + ", " + detail.getQuantity() + ", " + detail.getQuantity() * detail.getBook().getPrice() + ");");
+            }
+        } catch (SQLException ex) {
+            System.out.println("System Error");
+            return 0;
+        }
+        return order_id;
+    }
+
+    public void showOrder(String wheres) {
+        if (Empty(wheres)) {
+            wheres = "(1=1)";
+        }
+        ArrayList<Order> orders = getOrders(wheres);
+        if (orders.size() > 0) {
+            Order order = orders.get(0);
+            ArrayList<OrderDetail> orderDetails = getOrderDetails(order.getId());
+            //
+            makeMenuHeader("Order List");
+            makeRow("Order Id: " + order.getId());
+            makeRow("Status Name: " + statusName(order.getStatus_id()));
+            makeRow("Received Address: " + (!Empty(order.getAddress_recieved()) ? order.getAddress_recieved() : ""));
+            makeRow("Created Date: " + (order.getCreate_date() != null ? order.getCreate_date() : ""));
+            makeRow("Price Total: " + order.getOrder_price() + " VND");
+
+            for (OrderDetail orderDetail : orderDetails) {
+                makeRow("-------------------------------------------");
+                makeRow("- Book Name: " + orderDetail.book_name);
+                makeRow("- Quantity: " + orderDetail.quantity);
+            }
+        } else {
+            makeRow("Not found");
+        }
     }
 
     public String statusName(int StatusId) {

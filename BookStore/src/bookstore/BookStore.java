@@ -42,20 +42,11 @@ public class BookStore {
             
             switch (selected) {
                 case 1:
-                   // _userController.login();
+                    _homeController.menuHome();
                     break;
                 case 2:
-                    _homeController.menu();
-                    break;
-                case 3:
-                    //_quickSearchManager.showMenu();
-                    break;
-                case 4:
-                    //_productController.manageFilterMenu();
-                    break;
-                case 5:
                     _adminManager.login();
-                case 6:
+                case 3:
                     System.exit(0);
                     break;
                 default:

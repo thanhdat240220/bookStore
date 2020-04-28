@@ -5,6 +5,8 @@
  */
 package model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author T440s
@@ -20,6 +22,15 @@ public class Book {
     public double price;
     public int quantity;
     public String size;
+    public ArrayList<Author> authors;
+    
+    public void setAuthors(ArrayList<Author> authors) {
+        this.authors = authors;
+    }
+
+    public ArrayList<Author> getAuthors() {
+        return authors;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -110,19 +121,4 @@ public class Book {
         this.author_id = author_id;
     }
 
-    public String getBook_name() {
-        return name;
-    }
-
-    public void setBook_name(String book_name) {
-        this.name = book_name;
-    }
-
-    public String getDescription() {
-        return content_summary;
-    }
-
-    public void setDescription(String description) {
-        this.content_summary = description;
-    }
 }
