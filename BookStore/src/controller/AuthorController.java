@@ -48,9 +48,9 @@ public class AuthorController extends BaseController {
                     Author author = new Author();
                     String name = enterString("Name");
                     author.setName(name);
-                    int yearOfBirth = enterNumber("Year of Birth");
-                    author.setYear_birthday(yearOfBirth);
-                    if (daoAuthor.checkDuplicateAuthor().name.equals(name) && daoAuthor.checkDuplicateAuthor().year_birthday == yearOfBirth) {
+                    String birthDate = enterDate("Birth Date");
+                    author.setBirth_date(birthDate);
+                    if (daoAuthor.checkDuplicateAuthor().name.equals(name) && daoAuthor.checkDuplicateAuthor().birth_date.equals(birthDate)) {
                         System.out.println("Author already existed!");
                     } else {
                         daoAuthor.addAuthor(author);
@@ -71,8 +71,8 @@ public class AuthorController extends BaseController {
                             String nameToEdit = enterString("New Name");
                             authorToEdit.setName(nameToEdit);
 
-                            int yearOfBirthToEdit = enterNumber("New Year of Birth");
-                            authorToEdit.setYear_birthday(yearOfBirthToEdit);
+                            String birthDateToEdit = enterDate("New Birth Date");
+                            authorToEdit.setBirth_date(birthDateToEdit);
 
                             daoAuthor.editAuthor(authorToEdit);
                             break;
@@ -104,6 +104,7 @@ public class AuthorController extends BaseController {
 //                    Author authorToShowAll = new Author();
                     System.out.println("    Show all Authors".toUpperCase());
                     daoAuthor.showAllAuthor();
+                    daoAuthor.dumb();
                     break;
                 case 6:
                     back();

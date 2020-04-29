@@ -17,12 +17,12 @@ public class DAOAuthor {
 
     public int addAuthor(Author author) {
         int n = 0;
-        String sql = "INSERT INTO author(name, year_of_birth) VALUES (?,?)";
+        String sql = "INSERT INTO author(name, birth_date) VALUES (?,?)";
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, author.getName());
-            preparedStatement.setInt(2, author.getYear_birthday());
+            preparedStatement.setString(2, author.getBirth_date());
 
             n = preparedStatement.executeUpdate();
             System.out.println("Added successfully!");
@@ -35,13 +35,13 @@ public class DAOAuthor {
 
     public int editAuthor(Author author) {
         int n = 0;
-        String sql = "UPDATE author SET name=?,year_of_birth=? WHERE id=?";
+        String sql = "UPDATE author SET name=?,birth_date=? WHERE id=?";
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setString(1, author.getName());
-            preparedStatement.setInt(2, author.getYear_birthday());
+            preparedStatement.setString(2, author.getBirth_date());
             preparedStatement.setInt(3, author.getId());
 
             n = preparedStatement.executeUpdate();
@@ -81,9 +81,9 @@ public class DAOAuthor {
                 while (resultSet.next()) {
                     int id = resultSet.getInt("id");
                     String name = resultSet.getString("name");
-                    int year_of_birth = resultSet.getInt("year_of_birth");
+                    String birth_date = resultSet.getString("birth_date");
 
-                    System.out.println("ID: " + id + "\t | \t Name: " + name + "\t | \t Year of Birth:" + year_of_birth);
+                    System.out.println("ID: " + id + "\t | \t Name: " + name + "\t | \t Birth Date:" + birth_date);
                 }
             } else {
                 System.out.println("Author not Found!");
@@ -106,9 +106,10 @@ public class DAOAuthor {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
-                int year_of_birth = resultSet.getInt("year_of_birth");
+//                String birth_date = resultSet.getString("birth_date");
+                String birth_date = formatDate(resultSet.getString("birth_date"));
 
-                System.out.println("ID: " + id + "\t | \t Name: " + name + "\t | \t Year of Birth: " + year_of_birth);
+                System.out.println("ID: " + id + "\t | \t Name: " + name + "\t | \t Birth Date: " + birth_date);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -146,9 +147,9 @@ public class DAOAuthor {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
-                int year_birthday = resultSet.getInt("year_of_birth");
+                String birth_date = formatDate(resultSet.getString("birth_date"));
 
-                author = new Author(id, name, year_birthday);
+                author = new Author(id, name, birth_date);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -168,5 +169,38 @@ public class DAOAuthor {
         }
 
         return resultSet;
+    }
+
+    // dumb
+    public String dumb() {
+        String sql = "SELECT CONVERT(varchar(10), cast(birth_date AS DATE), 103) AS date_of_birth FROM author";
+        String birthDate = "";
+
+        ResultSet resultSet = getData(sql);
+
+        try {
+            while (resultSet.next()) {
+                birthDate = resultSet.getString(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return birthDate;
+    }
+
+    public String formatDate(String date) {
+//        return String.join("/", (Collections.reverse(Arrays.asList(date.split("-")))));
+//        System.out.println(Arrays.toString(date.split("-")));;
+
+         String[] arrStr = date.split("-");
+
+        for(int i=0; i<arrStr.length/2; i++){
+            String temp = arrStr[i];
+            arrStr[i] = arrStr[arrStr.length -i -1];
+            arrStr[arrStr.length -i -1] = temp;
+        }
+
+        return String.join("/", arrStr);
     }
 }

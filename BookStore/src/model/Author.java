@@ -12,16 +12,16 @@ package model;
 public class Author {
     public int id;
     public String name;
-    public int year_birthday;
+    public String birth_date;
 
     public Author() {
 
     }
 
-    public Author(int id, String name, int year_birthday) {
+    public Author(int id, String name, String birth_date) {
         this.id = id;
         this.name = name;
-        this.year_birthday = year_birthday;
+        this.birth_date = birth_date;
     }
 
     public int getId() {
@@ -40,11 +40,11 @@ public class Author {
         this.name = name;
     }
 
-    public int getYear_birthday() {
-        return year_birthday;
+    public String getBirth_date() {
+        return birth_date;
     }
 
-    public void setYear_birthday(int year_birthday) {
-        this.year_birthday = year_birthday;
+    public void setBirth_date(String birth_date) {
+        this.birth_date = birth_date;
     }
 }
