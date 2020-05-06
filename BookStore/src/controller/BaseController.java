@@ -58,9 +58,13 @@ public class BaseController {
         do {
             System.out.print("- Enter " + option + ":");
             choiceStr = scanner.nextLine();
-            if (isDouble(choiceStr) || Integer.parseInt(choiceStr) == 0) {
-                break;
-            } else {
+            try {
+                if (isDouble(choiceStr) || Integer.parseInt(choiceStr) == 0) {
+                    break;
+                } else {
+                    System.out.println("- " + option + " must be a positive number!");
+                }
+            } catch (Exception e) {
                 System.out.println("- " + option + " must be a positive number!");
             }
         } while (true);
@@ -80,7 +84,7 @@ public class BaseController {
         } while (true);
         return (int) Double.parseDouble(choiceStr);
     }
-    
+
     public Double enterRealNumber(String option) {
         String choiceStr = "";
         do {

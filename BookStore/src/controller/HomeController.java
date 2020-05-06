@@ -54,6 +54,7 @@ public class HomeController extends BaseController {
                     menuKind();
                     break;
                 case 3:
+                    quickSearch();
                     break;
                 case 4:
                     manageCart();
@@ -89,6 +90,44 @@ public class HomeController extends BaseController {
                     break;
             }
         } while (category_id != 0);
+    }
+
+    public void quickSearch() {
+        boolean retry = false;
+        do {
+            String sql = "(1=1)";
+            String keyWord = enterString("Enter Key Search");
+            sql += " and (LOWER(name) like '%" + keyWord.trim().toLowerCase() + "%' or LOWER(content_summary) like '%" + keyWord.trim().toLowerCase() + "%')";
+            double startMoney = -1, endMoney = -1;
+            System.out.println("Enter Start Money ? (y/n)");
+            String choice = scanner.nextLine();
+            if (choice.equalsIgnoreCase("y")) {
+                startMoney = enterStartMoney("Start Money");
+                sql += " and price >=" + startMoney;
+            }
+            System.out.println("Enter End Money ? (y/n)");
+            choice = scanner.nextLine();
+            if (choice.equalsIgnoreCase("y")) {
+                endMoney = enterEndMoney("End Money", startMoney);
+                sql += " and price <=" + endMoney;
+            }
+            //
+            ArrayList<Book> books = _productController.getBooks(sql);
+            if (books.size() > 0) {
+                makeMenuHeader("Search Book");
+                _productController.funcShowBook(books);
+                System.out.println("Search again?");
+            } else {
+                System.out.println("Not Found !");
+                System.out.println("Search Again ? (y/n)");
+            }
+            choice = scanner.nextLine();
+            if (choice.equalsIgnoreCase("y")) {
+                retry = true;
+            } else {
+                retry = false;
+            }
+        } while (retry);
     }
 
     public void addBookToCart() {
@@ -266,7 +305,7 @@ public class HomeController extends BaseController {
                     makeRow("Order success");
                     _cartList = new Cart();
                     updatePriceCart();
-                     _orderController.showOrder("id=" + order_id);
+                    _orderController.showOrder("id=" + order_id);
                 }
             }
         } else {
@@ -280,5 +319,41 @@ public class HomeController extends BaseController {
             priceTotal = detail.getBook().getPrice() * detail.getQuantity();
         }
         _cartList.setTotalPrice(priceTotal);
+    }
+
+    public double enterEndMoney(String option, double startMoney) {
+        String choiceStr = "";
+        do {
+            System.out.print("- Enter " + option + ":");
+            choiceStr = scanner.nextLine();
+            if (isDouble(choiceStr) || Integer.parseInt(choiceStr) == 0) {
+                if (Double.parseDouble(choiceStr) > startMoney) {
+                    break;
+                } else {
+                    System.out.println("- " + option + " must greater startMoney!");
+                }
+            } else {
+                System.out.println("- " + option + " must be a positive number!");
+            }
+        } while (true);
+        return Double.parseDouble(choiceStr);
+    }
+
+    public double enterStartMoney(String option) {
+        String choiceStr = "";
+        do {
+            System.out.print("- Enter " + option + ":");
+            choiceStr = scanner.nextLine();
+            try {
+                if (isDouble(choiceStr) || Integer.parseInt(choiceStr) == 0) {
+                    break;
+                } else {
+                    System.out.println("- " + option + " must be a positive number!");
+                }
+            } catch (Exception e) {
+                System.out.println("- " + option + " must be a positive number!");
+            }
+        } while (true);
+        return (int) Double.parseDouble(choiceStr);
     }
 }

@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Customer;
 import model.Employee;
 import model.Order;
 import model.OrderDetail;
@@ -25,11 +26,11 @@ import viewmodel.CartDetail;
  * @author T440s
  */
 public class OrderController extends BaseController {
-
+    
     protected Statement _statement;
     protected Employee _employee;
     private UserController _userController;
-
+    
     public OrderController(Connection connect) {
         super(connect);
         _userController = new UserController(connect);
@@ -39,7 +40,7 @@ public class OrderController extends BaseController {
             Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public void menu(Employee employee) {
         _employee = employee;
         int choice;
@@ -69,7 +70,7 @@ public class OrderController extends BaseController {
             }
         } while (choice != 4);
     }
-
+    
     public void MenuUnconfimred() {
         int choice;
         do {
@@ -103,7 +104,7 @@ public class OrderController extends BaseController {
             }
         } while (choice != 5);
     }
-
+    
     public void MenuDelivering() {
         int choice;
         do {
@@ -137,7 +138,7 @@ public class OrderController extends BaseController {
             }
         } while (choice != 5);
     }
-
+    
     public void MenuDelivered() {
         int choice;
         do {
@@ -167,21 +168,24 @@ public class OrderController extends BaseController {
             }
         } while (choice != 4);
     }
-
+    
     public void showOrderDetail(int StatusId) {
         int OrderID = enterNumber("Order ID");
         ArrayList<Order> orders = getOrders("Id=" + OrderID + " and status_id=" + StatusId);
         if (orders.size() > 0) {
             Order order = orders.get(0);
             ArrayList<OrderDetail> orderDetails = getOrderDetails(OrderID);
+            Customer customer = _userController.getCustomer("id=" + order.getCustomer_id());
             // 
             makeMenuHeader("Order Detail");
             makeRow("Order Id: " + order.getId());
             makeRow("Status Name: " + statusName(StatusId));
+            makeRow("Name : " + customer.getName());
+            makeRow("Phone Number: " + customer.getPhone());
             makeRow("Received Address: " + (!Empty(order.getAddress_recieved()) ? order.getAddress_recieved() : ""));
             makeRow("Created Date: " + (order.getCreate_date() != null ? order.getCreate_date() : ""));
             makeRow("Price Total: " + order.getOrder_price() + " VND");
-
+            
             for (OrderDetail orderDetail : orderDetails) {
                 makeRow("-------------------------------------------");
                 makeRow("- Book Name: " + orderDetail.book_name);
@@ -191,7 +195,7 @@ public class OrderController extends BaseController {
             makeRow("Not found order has ID=" + OrderID);
         }
     }
-
+    
     public void ContinueOrder(int StatusId) {
         int OrderID = enterNumber("Order ID");
         ArrayList<Order> orders = getOrders("Id=" + OrderID + " and status_id=" + StatusId);
@@ -203,12 +207,12 @@ public class OrderController extends BaseController {
             } catch (SQLException ex) {
                 makeRow("Error System");
             }
-
+            
         } else {
             makeRow("Not found order has ID=" + OrderID);
         }
     }
-
+    
     public void ShowAllOrders(int StatusId) {
         ArrayList<Order> Orders = getOrders(" status_id=" + StatusId);
         if (Orders.size() > 0) {
@@ -225,7 +229,7 @@ public class OrderController extends BaseController {
             makeRow("Empty Order");
         }
     }
-
+    
     public void DeleteOrder(int StatusId) {
         int OrderID = enterNumber("Order ID");
         ArrayList<Order> orders = getOrders("Id=" + OrderID + " and status_id=" + StatusId);
@@ -240,7 +244,7 @@ public class OrderController extends BaseController {
             makeRow("Not found order has ID=" + OrderID);
         }
     }
-
+    
     public ArrayList<Order> getOrders(String where) {
         ArrayList<Order> orders = new ArrayList<Order>();
         try {
@@ -261,7 +265,7 @@ public class OrderController extends BaseController {
         }
         return orders;
     }
-
+    
     public ArrayList<OrderDetail> getOrderDetails(int OrderId) {
         ArrayList<OrderDetail> orderDetails = new ArrayList<OrderDetail>();
         try {
@@ -281,7 +285,7 @@ public class OrderController extends BaseController {
         }
         return orderDetails;
     }
-
+    
     public int saveOrderAnonymous(Cart cart, String Name, String address, String phone) {
         int customer_id = 0;
         int order_id = 0;
@@ -292,7 +296,7 @@ public class OrderController extends BaseController {
                     + "VALUES('" + Name + "', '" + address + "', '" + phone + "') ;");
             rs.next();
             customer_id = rs.getInt("id");
-
+            
             rs = _statement.executeQuery("INSERT INTO book_store.dbo.orders\n"
                     + "(customer_id, address_recieved, order_price, status_id)\n "
                     + "OUTPUT Inserted.id \n"
@@ -310,7 +314,7 @@ public class OrderController extends BaseController {
         }
         return order_id;
     }
-
+    
     public void showOrder(String wheres) {
         if (Empty(wheres)) {
             wheres = "(1=1)";
@@ -326,7 +330,7 @@ public class OrderController extends BaseController {
             makeRow("Received Address: " + (!Empty(order.getAddress_recieved()) ? order.getAddress_recieved() : ""));
             makeRow("Created Date: " + (order.getCreate_date() != null ? order.getCreate_date() : ""));
             makeRow("Price Total: " + order.getOrder_price() + " VND");
-
+            
             for (OrderDetail orderDetail : orderDetails) {
                 makeRow("-------------------------------------------");
                 makeRow("- Book Name: " + orderDetail.book_name);
@@ -336,7 +340,7 @@ public class OrderController extends BaseController {
             makeRow("Not found");
         }
     }
-
+    
     public String statusName(int StatusId) {
         switch (StatusId) {
             case 1:

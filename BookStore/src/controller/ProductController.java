@@ -79,25 +79,29 @@ public class ProductController extends BaseController {
         ArrayList<Book> books = getBooks(wheres);
         makeMenuHeader("Book List");
         if (books.size() > 0) {
-            for (Book book : books) {
-                makeRow("Book Id:" + book.getId());
-                makeRow("Book Name:" + book.getName());
-                makeRow("Price:" + book.getPrice()+" VND");
-                makeRow("Publish Year:" + book.getPublish_year());
-                makeRow("Content Sumary:" + book.getContent_summary());
-                makeRow("Quantity:" + book.getQuantity());
-                if (book.authors != null) {
-                    makeRow("Author: ");
-                    for (Author author : book.authors) {
-                        makeRow("-" + author.getName());
-                    }
-                } else {
-                    makeRow("Author: Unauthenticated");
-                }
-                makeRow("--------------------------");
-            }
+            funcShowBook(books);
         } else {
             makeRow("Not Found");
+        }
+    }
+
+    public void funcShowBook(ArrayList<Book> books) {
+        for (Book book : books) {
+            makeRow("Book Id:" + book.getId());
+            makeRow("Book Name:" + book.getName());
+            makeRow("Price:" + book.getPrice() + " VND");
+            makeRow("Publish Year:" + book.getPublish_year());
+            makeRow("Content Sumary:" + book.getContent_summary());
+            makeRow("Quantity:" + book.getQuantity());
+            if (book.authors != null) {
+                makeRow("Author: ");
+                for (Author author : book.authors) {
+                    makeRow("-" + author.getName());
+                }
+            } else {
+                makeRow("Author: Unauthenticated");
+            }
+            makeRow("--------------------------");
         }
     }
 
@@ -152,7 +156,7 @@ public class ProductController extends BaseController {
                     authors.add(author);
                 }
             }
-            if (books.size() > 1) {
+            if (books.size() > 0) {
                 books.get(books.size() - 1).authors = authors;
             }
         } catch (SQLException ex) {
