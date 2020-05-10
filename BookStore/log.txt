@@ -1,0 +1,2 @@
+1. Chưa check khi add author vào có bị trùng hay không
+2. Chưa check khi add book vào có bị trùng hay không

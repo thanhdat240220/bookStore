@@ -5,26 +5,30 @@
  */
 package controller;
 
+import dao.DAOCategory;
+import model.Category;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Book;
-import model.Category;
-import java.sql.Statement;
 
 /**
- *
  * @author T440s
  */
 public class CategoryController extends BaseController {
 
     private Statement _statement;
+    DAOCategory daoCategory;
 
     public CategoryController(Connection connect) {
         super(connect);
+        daoCategory = new DAOCategory(connect);
+        this.connection = connect;
+
         try {
             _statement = connect.createStatement();
         } catch (SQLException ex) {
@@ -33,14 +37,14 @@ public class CategoryController extends BaseController {
     }
 
     public void showProductEditor() {
-        //makeMenuHeader("Products infomation Editor");
+        //makeMenuHeader("Products information Editor");
         //showAll();
         makeMenuRow("Options:");
-        makeMenuRow("   1.Add Author");
-        makeMenuRow("   2.Edit Author");
-        makeMenuRow("   3.Delete Author");
-        makeMenuRow("   4.Watch Author");
-        makeMenuRow("   5.Show All Author");
+        makeMenuRow("   1.Add Category");
+        makeMenuRow("   2.Edit Category");
+        makeMenuRow("   3.Delete Category");
+        makeMenuRow("   4.Show A Category By ID");
+        makeMenuRow("   5.Show All Categories");
         makeMenuRow("   6.Back to previous page");
         makeMenuFooter();
     }
@@ -48,23 +52,23 @@ public class CategoryController extends BaseController {
     public void menu() {
         int choice;
         do {
-            // showProductEditor();
+            showProductEditor();
             choice = enterNumber("an option");
             switch (choice) {
                 case 1:
-                    //add();
+                    addCategory();
                     break;
                 case 2:
-                    //edit();
+                    editCategory();
                     break;
                 case 3:
-                    //delete();
+                    deleteCategory();
                     break;
                 case 4:
-                    //showDetailById();
+                    showACategory();
                     break;
                 case 5:
-                    //clearConsole();
+                    showAllCategories();
                     break;
                 case 6:
                     back();
@@ -74,6 +78,100 @@ public class CategoryController extends BaseController {
                     break;
             }
         } while (choice != 6);
+    }
+
+    public void addCategory() {
+        makeMenuHeader("Add a New Category");
+        Category category = new Category();
+        String name = enterString("Name");
+        category.setName(name);
+        if (daoCategory.checkDuplicateCategory().name.equals(name)) {
+            System.out.println("Category already existed!");
+        } else {
+            daoCategory.addCategory(category);
+            makeMenuFooter();
+        }
+    }
+
+    public void editCategory() {
+        makeMenuHeader("Edit a Category");
+        Category category = new Category();
+        int id = enterNumber("ID to Edit");
+
+        while (true) {
+            if (daoCategory.checkExistedCategory(id).equals("")) {
+                System.out.println("Author not Found! Please try again!");
+                System.out.print("Retry? (y/n): ");
+                String choice = scanner.nextLine();
+
+                if (!choice.equalsIgnoreCase("y")) {
+                    break;
+                } else {
+                    id = enterNumber("ID to Edit");
+                }
+            } else {
+                category.setId(id);
+                String name = enterString("New Name");
+                category.setName(name);
+
+                daoCategory.editCategory(category);
+                makeMenuFooter();
+                break;
+            }
+        }
+    }
+
+    public void deleteCategory() {
+        makeMenuHeader("Delete a Category");
+        int id = enterNumber("ID to Delete");
+
+        while (true) {
+            if (daoCategory.checkExistedCategory(id).equals("")) {
+                System.out.println("Category not Found! Please try again!");
+                System.out.print("Retry? (y/n): ");
+                String choice = scanner.nextLine();
+
+                if (!choice.equalsIgnoreCase("y")) {
+                    break;
+                } else {
+                    id = enterNumber("ID to Delete");
+                }
+            } else {
+                daoCategory.removeCategory(id);
+                makeMenuFooter();
+                break;
+            }
+        }
+    }
+
+    public void showACategory() {
+        makeMenuHeader("Show a Category by ID");
+        int id = enterNumber("ID to Show");
+//        daoCategory.showACategory(id);
+//        makeMenuFooter();
+        while (true) {
+            if (daoCategory.checkExistedCategory(id).equals("")) {
+                System.out.println("Category not Found! Please try again!");
+                System.out.print("Retry? (y/n): ");
+                String choice = scanner.nextLine();
+
+                if (!choice.equalsIgnoreCase("y")) {
+                    break;
+                } else {
+                    id = enterNumber("ID to Show");
+                }
+            } else {
+                daoCategory.removeCategory(id);
+                makeMenuFooter();
+                break;
+            }
+        }
+    }
+
+    public void showAllCategories() {
+        makeMenuHeader("Show all Categories");
+        daoCategory.showAllCategories();
+        makeMenuFooter();
     }
 
     public void showCategory(String wheres) {

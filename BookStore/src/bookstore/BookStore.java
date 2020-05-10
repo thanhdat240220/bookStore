@@ -5,14 +5,10 @@
  */
 package bookstore;
 
-import controller.AdminManager;
-import controller.BaseController;
-import controller.HomeController;
-import controller.OrderController;
-import controller.ProductController;
-import controller.UserController;
-import java.sql.Connection;
+import controller.*;
 import model.DBConnection;
+
+import java.sql.Connection;
 
 /**
  *
@@ -28,6 +24,13 @@ public class BookStore {
     public static void main(String[] args) {
         Connection conn = connection.Connecting();
         
+//        BaseController _baseController = new BaseController(conn);
+//        HomeController _homeController = new HomeController(conn);
+//        ProductController _productController = new ProductController(conn);
+//        UserController _userController = new UserController(conn);
+//        OrderController _orderController = new OrderController(conn);
+//        AdminManager _adminManager = new AdminManager(conn);
+
         AdminManager _adminManager = new AdminManager(conn);
         BaseController _baseController = new BaseController(conn);
         HomeController _homeController = new HomeController(conn);
@@ -36,10 +39,11 @@ public class BookStore {
         OrderController _orderController = new OrderController(conn);
         
         int selected;
+
         do {
             _baseController.showMainMenu();
             selected = _baseController.enterNumber("an option");
-            
+
             switch (selected) {
                 case 1:
                     _homeController.menuHome();

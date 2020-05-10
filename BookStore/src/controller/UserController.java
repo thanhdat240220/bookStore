@@ -5,6 +5,9 @@
  */
 package controller;
 
+import model.Customer;
+import model.Employee;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,31 +15,26 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Customer;
-import model.Employee;
-import model.Order;
 
 /**
  *
  * @author T440s
  */
-public class UserController extends BaseController {
-
-    protected Statement _statement;
-
+public class UserController extends BaseController{
+    protected Statement statement;
     public UserController(Connection connect) {
         super(connect);
         try {
-            _statement = connect.createStatement();
+            statement=connect.createStatement();
         } catch (SQLException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public Employee getEmployee(String where) {
+    
+    public Employee getEmployee(String where){
         ArrayList<Employee> employees = new ArrayList<Employee>();
         try {
-            ResultSet rs = _statement.executeQuery("select * "
+            ResultSet rs = statement.executeQuery("select * "
                     + "from employee Where (1=1) And " + where);
             while (rs.next()) {
                 Employee employee = new Employee();
@@ -58,7 +56,7 @@ public class UserController extends BaseController {
     public Customer getCustomer(String where) {
         ArrayList<Customer> customers = new ArrayList<Customer>();
         try {
-            ResultSet rs = _statement.executeQuery("select * "
+            ResultSet rs = statement.executeQuery("select * "
                     + "from customer Where (1=1) And " + where);
             while (rs.next()) {
                 Customer customer = new Customer();
@@ -72,4 +70,5 @@ public class UserController extends BaseController {
         }
         return customers.size() > 0 ? customers.get(0) : null;
     }
+    
 }

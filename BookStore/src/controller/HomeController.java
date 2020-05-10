@@ -5,24 +5,19 @@
  */
 package controller;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Book;
-import java.util.ArrayList;
 import model.Author;
-import model.Order;
+import model.Book;
 import model.Customer;
 import viewmodel.Cart;
 import viewmodel.CartDetail;
 
+import java.sql.Connection;
+import java.util.ArrayList;
+
 /**
- *
  * @author T440s
  */
 public class HomeController extends BaseController {
-
     private ProductController _productController;
     private CategoryController _categoryController;
     private OrderController _orderController;
@@ -37,16 +32,17 @@ public class HomeController extends BaseController {
         _cartList = new Cart();
     }
 
+
     public void menuHome() {
         int choice;
         do {
             makeMenuHeader("System management window");
             makeMenuRow("1. Login User.");
-            makeMenuRow("2. Kind of books.");
-            makeMenuRow("3. Quick search Products.");
+            makeMenuRow("2. Filter Books by Category");
+            makeMenuRow("3. Quick Search Books.");
             makeMenuRow("4. Show Cart");
-            makeMenuRow("5. Add product to cart.");
-            makeMenuRow("6. Back to main menu");
+            makeMenuRow("5. Add Book to Cart.");
+            makeMenuRow("6. Back to Main Menu");
             makeMenuFooter();
             choice = enterNumber("an option");
             switch (choice) {
@@ -356,4 +352,5 @@ public class HomeController extends BaseController {
         } while (true);
         return (int) Double.parseDouble(choiceStr);
     }
+
 }

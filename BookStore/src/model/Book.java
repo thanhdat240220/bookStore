@@ -23,14 +23,24 @@ public class Book {
     public int quantity;
     public String size;
     public ArrayList<Author> authors;
-    
-    public void setAuthors(ArrayList<Author> authors) {
-        this.authors = authors;
+
+    public Book() {
+
     }
 
-    public ArrayList<Author> getAuthors() {
-        return authors;
+    public Book(int id, int categoryId, int statusId, String name, String contentSummary, int publishYear, double price, int quantity, String size, String weight) {
+        this.Id = id;
+        this.category_id = categoryId;
+        this.name = name;
+        this.content_summary = contentSummary;
+        this.status_id = statusId;
+        this.publish_year = publishYear;
+        this.price = price;
+        this.quantity = quantity;
+        this.size = size;
+        this.weight = weight;
     }
+
 
     public void setName(String name) {
         this.name = name;
@@ -113,6 +123,22 @@ public class Book {
         this.category_id = category_id;
     }
 
+    public String getBook_name() {
+        return name;
+    }
+
+    public void setBook_name(String book_name) {
+        this.name = book_name;
+    }
+
+    public String getDescription() {
+        return content_summary;
+    }
+
+    public void setDescription(String description) {
+        this.content_summary = description;
+    }
+
     public int getAuthor_id() {
         return author_id;
     }
@@ -120,5 +146,4 @@ public class Book {
     public void setAuthor_id(int author_id) {
         this.author_id = author_id;
     }
-
 }

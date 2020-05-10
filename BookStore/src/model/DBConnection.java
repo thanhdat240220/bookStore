@@ -8,7 +8,6 @@ package model;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,14 +23,14 @@ public class DBConnection {
     private String dbPassWord;
     public DBConnection(){
         driver="com.microsoft.sqlserver.jdbc.SQLServerDriver";
-        connectionString="jdbc:sqlserver://127.0.0.1:1433;databaseName=book_store";
+        connectionString="jdbc:sqlserver://127.0.0.1:49690;databaseName=book_store";
         dbUserName="sa";
-        dbPassWord="123456";
+        dbPassWord="sana";
     }
     
     public DBConnection(String userName,String passWord,String dbString){
         driver="com.microsoft.sqlserver.jdbc.SQLServerDriver";
-        connectionString="jdbc:sqlserver://127.0.0.1:1433;databaseName="+dbString;
+        connectionString="jdbc:sqlserver://127.0.0.1:49690;databaseName="+dbString;
         dbUserName=userName;
         dbPassWord=passWord;
     }
@@ -40,8 +39,9 @@ public class DBConnection {
         try {
             Class.forName(driver);
             connection=DriverManager.getConnection(connectionString,dbUserName,dbPassWord);
+            System.out.println("Connected successfully!");
         } catch (Exception ex) {
-            System.out.println("Ket noi that bai!");
+            System.out.println("Connected failed!");
         }
         return connection;
     }

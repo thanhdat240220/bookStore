@@ -12,7 +12,17 @@ package model;
 public class Author {
     public int id;
     public String name;
-    public int year_birthday;
+    public String date_of_birth;
+
+    public Author() {
+
+    }
+
+    public Author(int id, String name, String date_of_birth) {
+        this.id = id;
+        this.name = name;
+        this.date_of_birth = date_of_birth;
+    }
 
     public int getId() {
         return id;
@@ -30,11 +40,11 @@ public class Author {
         this.name = name;
     }
 
-    public int getYear_birthday() {
-        return year_birthday;
+    public String getDate_of_birth() {
+        return date_of_birth;
     }
 
-    public void setYear_birthday(int year_birthday) {
-        this.year_birthday = year_birthday;
+    public void setDate_of_birth(String year_birthday) {
+        this.date_of_birth = year_birthday;
     }
 }

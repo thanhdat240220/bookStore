@@ -5,13 +5,13 @@
  */
 package controller;
 
+import model.Employee;
+
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.sql.Statement;
-import model.Employee;
 
 /**
  *
@@ -23,6 +23,7 @@ public class AdminManager extends BaseController {
     private AuthorController _AuthorController;
     private OrderController _OrderController;
     private UserController _UserController;
+    private CategoryController _CategoryController;
     protected Employee _employee;
     protected Statement statement;
 
@@ -32,6 +33,7 @@ public class AdminManager extends BaseController {
         _AuthorController = new AuthorController(connect);
         _OrderController = new OrderController(connect);
         _UserController = new UserController(connect);
+        _CategoryController = new CategoryController(connect);
         try {
             statement = connect.createStatement();
         } catch (SQLException ex) {
@@ -68,8 +70,9 @@ public class AdminManager extends BaseController {
             makeMenuHeader("System management window");
             makeMenuRow("1.Manage Products");
             makeMenuRow("2.Manage Author");
-            makeMenuRow("3.Manage Order");
-            makeMenuRow("4.Sign out and back to main menu");
+            makeMenuRow("3.Manage Category");
+            makeMenuRow("4.Manage Order");
+            makeMenuRow("5.Sign out and back to main menu");
             makeMenuFooter();
             choice = enterNumber("an option");
             switch (choice) {
@@ -80,9 +83,11 @@ public class AdminManager extends BaseController {
                     _AuthorController.menu();
                     break;
                 case 3:
-                    _OrderController.menu(_employee);
+                    _CategoryController.menu();
                     break;
                 case 4:
+                    _OrderController.menu(_employee);
+                case 5:
                     //logout();
                     back();
                     break;
@@ -90,6 +95,6 @@ public class AdminManager extends BaseController {
                     System.out.println("¤ Option is invalid!");
                     break;
             }
-        } while (choice != 4);
+        } while (choice != 5);
     }
 }

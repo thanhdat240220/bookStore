@@ -7,7 +7,6 @@ package controller;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
@@ -15,7 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import model.Employee;
 
 /**
  *
@@ -56,25 +54,7 @@ public class BaseController {
     public int enterNumber(String option) {
         String choiceStr = "";
         do {
-            System.out.print("- Enter " + option + ":");
-            choiceStr = scanner.nextLine();
-            try {
-                if (isDouble(choiceStr) || Integer.parseInt(choiceStr) == 0) {
-                    break;
-                } else {
-                    System.out.println("- " + option + " must be a positive number!");
-                }
-            } catch (Exception e) {
-                System.out.println("- " + option + " must be a positive number!");
-            }
-        } while (true);
-        return (int) Double.parseDouble(choiceStr);
-    }
-
-    public int enterInterger(String option) {
-        String choiceStr = "";
-        do {
-            System.out.print("- Enter " + option + ":");
+            System.out.print("- Enter " + option + ": ");
             choiceStr = scanner.nextLine();
             if (isDouble(choiceStr)) {
                 break;
@@ -88,7 +68,7 @@ public class BaseController {
     public Double enterRealNumber(String option) {
         String choiceStr = "";
         do {
-            System.out.print("- Enter " + option + ":");
+            System.out.print("- Enter " + option + ": ");
             choiceStr = scanner.nextLine();
             if (isDouble(choiceStr)) {
                 break;
@@ -132,12 +112,12 @@ public class BaseController {
     }
 
     public String enterString(String option) {
-        System.out.print("- Enter " + option + ":");
+        System.out.print("- Enter " + option + ": ");
         String choiceStr = "";
         do {
             choiceStr = scanner.nextLine();
             if (choiceStr.trim().isEmpty()) {
-                System.out.println("- " + option + " must has infomation!");
+                System.out.println("- " + option + " must has information!");
                 System.out.print("- Re-enter " + option + ": ");
             } else {
                 break;
@@ -147,7 +127,7 @@ public class BaseController {
     }
 
     public boolean enterBoolean(String option) {
-        System.out.print("- Enter " + option + " (yes/no):");
+        System.out.print("- Enter " + option + " (yes/no): ");
         String choiceStr = scanner.nextLine();
         return choiceStr.contains("y") || choiceStr.contains("Y");
     }
@@ -157,9 +137,9 @@ public class BaseController {
         String date = "";
         do {
             try {
-                System.out.print("- Enter " + option + " (dd/MM/yyyy HH:mm):");
+                System.out.print("- Enter " + option + " (dd/MM/yyyy): ");
                 date = scanner.nextLine();
-                SimpleDateFormat formatter1 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                SimpleDateFormat formatter1 = new SimpleDateFormat("dd/MM/yyyy");
                 formatter1.parse(date);
                 isValid = true;
             } catch (ParseException ex) {
@@ -168,6 +148,20 @@ public class BaseController {
         } while (!isValid);
 
         return date;
+    }
+
+    public int enterInterger(String option) {
+        String choiceStr = "";
+        do {
+            System.out.print("- Enter " + option + ":");
+            choiceStr = scanner.nextLine();
+            if (isDouble(choiceStr)) {
+                break;
+            } else {
+                System.out.println("- " + option + " must be a positive number!");
+            }
+        } while (true);
+        return (int) Double.parseDouble(choiceStr);
     }
 
     public boolean Empty(String string) {

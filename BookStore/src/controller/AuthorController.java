@@ -5,27 +5,33 @@
  */
 package controller;
 
+import dao.DAOAuthor;
+import model.Author;
+
 import java.sql.Connection;
 
 /**
- *
  * @author T440s
  */
 public class AuthorController extends BaseController {
 
+    DAOAuthor daoAuthor;
+
     public AuthorController(Connection connect) {
         super(connect);
+        daoAuthor = new DAOAuthor(connect);
+        this.connection = connect;
     }
 
     public void showProductEditor() {
-        //makeMenuHeader("Products infomation Editor");
+        //makeMenuHeader("Products information Editor");
         //showAll();
         makeMenuRow("Options:");
         makeMenuRow("   1.Add Author");
         makeMenuRow("   2.Edit Author");
         makeMenuRow("   3.Delete Author");
-        makeMenuRow("   4.Watch Author");
-        makeMenuRow("   5.Show All Author");
+        makeMenuRow("   4.Show An Author By ID");
+        makeMenuRow("   5.Show All Authors");
         makeMenuRow("   6.Back to previous page");
         makeMenuFooter();
     }
@@ -37,19 +43,19 @@ public class AuthorController extends BaseController {
             choice = enterNumber("an option");
             switch (choice) {
                 case 1:
-                    //add();
+                    addAuthor();
                     break;
                 case 2:
-                    //edit();
+                    editAuthor();
                     break;
                 case 3:
-                    //delete();
+                    deleteAuthor();
                     break;
                 case 4:
-                    //showDetailById();
+                    showAnAuthor();
                     break;
                 case 5:
-                    //clearConsole();
+                    showAllAuthors();
                     break;
                 case 6:
                     back();
@@ -59,5 +65,103 @@ public class AuthorController extends BaseController {
                     break;
             }
         } while (choice != 6);
+    }
+
+    public void addAuthor() {
+        makeMenuHeader("Add a New Author");
+        Author author = new Author();
+        String name = enterString("Name");
+        author.setName(name);
+        String date_of_birth = enterDate("Date of Birth");
+        author.setDate_of_birth(date_of_birth);
+        if (daoAuthor.checkDuplicateAuthor().name.equals(name) && daoAuthor.checkDuplicateAuthor().date_of_birth.equals(date_of_birth)) {
+            System.out.println("Author already existed!");
+        } else {
+            daoAuthor.addAuthor(author);
+            makeMenuFooter();
+        }
+    }
+
+    public void editAuthor() {
+        makeMenuHeader("Edit an Author");
+        Author author = new Author();
+        int id = enterNumber("ID to Edit");
+
+        while (true) {
+            if (daoAuthor.checkExistedAuthor(id).equals("")) {
+                System.out.println("Author not Found! Please try again!");
+                System.out.print("Retry? (y/n): ");
+                String choice = scanner.nextLine();
+
+                if (!choice.equalsIgnoreCase("y")) {
+                    break;
+                } else {
+                    id = enterNumber("ID to Edit");
+                }
+            } else {
+                author.setId(id);
+                String name = enterString("New Name");
+                author.setName(name);
+
+                String date_of_birth = enterString("New Date of Birth");
+                author.setDate_of_birth(date_of_birth);
+
+                daoAuthor.editAuthor(author);
+                makeMenuFooter();
+                break;
+            }
+        }
+    }
+
+    public void deleteAuthor() {
+        makeMenuHeader("Delete an Author");
+        int id = enterNumber("ID to Delete");
+
+        while (true) {
+            if (daoAuthor.checkExistedAuthor(id).equals("")) {
+                System.out.println("Author not Found! Please try again!");
+                System.out.print("Retry? (y/n): ");
+                String choice = scanner.nextLine();
+
+                if (!choice.equalsIgnoreCase("y")) {
+                    break;
+                } else {
+                    id = enterNumber("ID to Edit");
+                }
+            } else {
+                daoAuthor.removeAuthor(id);
+                makeMenuFooter();
+                break;
+            }
+        }
+    }
+
+    public void showAnAuthor() {
+        makeMenuHeader("Show an Author by ID");
+        int id = enterNumber("ID to Show");
+
+        while (true) {
+            if (daoAuthor.checkExistedAuthor(id).equals("")) {
+                System.out.println("Author not Found! Please try again!");
+                System.out.print("Retry? (y/n): ");
+                String choice = scanner.nextLine();
+
+                if (!choice.equalsIgnoreCase("y")) {
+                    break;
+                } else {
+                    id = enterNumber("ID to Edit");
+                }
+            } else {
+                daoAuthor.showAnAuthor(id);
+                makeMenuFooter();
+                break;
+            }
+        }
+    }
+
+    public void showAllAuthors() {
+        makeMenuHeader("Show all Authors");
+        daoAuthor.showAllAuthor();
+        makeMenuFooter();
     }
 }
