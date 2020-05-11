@@ -6,6 +6,7 @@ import model.Category;
 import java.sql.*;
 
 public class DAOCategory extends BaseController {
+
     Connection connection;
 
     public DAOCategory(Connection connection) {
@@ -38,7 +39,7 @@ public class DAOCategory extends BaseController {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setString(1, category.getName());
-            preparedStatement.setInt(3, category.getId());
+            preparedStatement.setInt(2, category.getId());
 
             n = preparedStatement.executeUpdate();
             System.out.println("Edited successfully!");
@@ -58,7 +59,7 @@ public class DAOCategory extends BaseController {
             n = statement.executeUpdate(sql);
             System.out.println("Deleted successfully!");
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Deleted fail!");
         }
 
         return n;
@@ -82,6 +83,7 @@ public class DAOCategory extends BaseController {
 
     public void showCategory(String sql) {
         ResultSet resultSet = getData(sql);
+        makeMenuHeader("Show all Categories");
 
         try {
 
@@ -96,6 +98,22 @@ public class DAOCategory extends BaseController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        makeMenuFooter();
+
+    }
+
+    public boolean checkCategoryHasBook(int id) {
+        String sql = "SELECT * FROM book WHERE category_id=" + id;
+        ResultSet resultSet = getData(sql);
+
+        try {
+            while (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public String checkExistedCategory(int id) {

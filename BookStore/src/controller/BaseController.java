@@ -137,9 +137,9 @@ public class BaseController {
         String date = "";
         do {
             try {
-                System.out.print("- Enter " + option + " (dd/MM/yyyy): ");
+                System.out.print("- Enter " + option + " (MM/dd/yyyy): ");
                 date = scanner.nextLine();
-                SimpleDateFormat formatter1 = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat formatter1 = new SimpleDateFormat("MM/dd/yyyy");
                 formatter1.parse(date);
                 isValid = true;
             } catch (ParseException ex) {

@@ -103,7 +103,7 @@ public class AuthorController extends BaseController {
                 String name = enterString("New Name");
                 author.setName(name);
 
-                String date_of_birth = enterString("New Date of Birth");
+                String date_of_birth = enterDate("New Date of Birth");
                 author.setDate_of_birth(date_of_birth);
 
                 daoAuthor.editAuthor(author);
@@ -160,8 +160,7 @@ public class AuthorController extends BaseController {
     }
 
     public void showAllAuthors() {
-        makeMenuHeader("Show all Authors");
         daoAuthor.showAllAuthor();
-        makeMenuFooter();
     }
+    
 }

@@ -18,20 +18,19 @@ public class DAOProduct extends BaseController {
 
     public int addProduct(Book book) {
         int n = 0;
-        String sql = "INSERT INTO book(category_id, status_id, name, content_summary, publish_year, price," +
-                " quantity, size, [weight]) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO book(category_id, name, content_summary, publish_year, price," +
+                " quantity, size, [weight]) VALUES (?,?,?,?,?,?,?,?)";
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, book.getCategory_id());
-            preparedStatement.setInt(2, book.getStatus_id());
-            preparedStatement.setString(3, book.getName());
-            preparedStatement.setString(4, book.getContent_summary());
-            preparedStatement.setInt(5, book.getPublish_year());
-            preparedStatement.setDouble(6, book.getPrice());
-            preparedStatement.setInt(7, book.getQuantity());
-            preparedStatement.setString(8, book.getSize());
-            preparedStatement.setString(9, book.getWeight());
+            preparedStatement.setString(2, book.getName());
+            preparedStatement.setString(3, book.getContent_summary());
+            preparedStatement.setInt(4, book.getPublish_year());
+            preparedStatement.setDouble(5, book.getPrice());
+            preparedStatement.setInt(6, book.getQuantity());
+            preparedStatement.setString(7, book.getSize());
+            preparedStatement.setString(8, book.getWeight());
 
             n = preparedStatement.executeUpdate();
 
@@ -44,21 +43,20 @@ public class DAOProduct extends BaseController {
 
     public int editProduct(Book book) {
         int n = 0;
-        String sql = "UPDATE book SET category_id=?, status_id=?, name=?, content_summary=?, " +
+        String sql = "UPDATE book SET category_id=?, name=?, content_summary=?, " +
                 "publish_year=?, price=?,quantity=?, size=?, [weight]=? WHERE id=?";
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, book.getCategory_id());
-            preparedStatement.setInt(2, book.getStatus_id());
-            preparedStatement.setString(3, book.getName());
-            preparedStatement.setString(4, book.getContent_summary());
-            preparedStatement.setInt(5, book.getPublish_year());
-            preparedStatement.setDouble(6, book.getPrice());
-            preparedStatement.setInt(7, book.getQuantity());
-            preparedStatement.setString(8, book.getSize());
-            preparedStatement.setString(9, book.getWeight());
-            preparedStatement.setInt(10, book.getId());
+            preparedStatement.setString(2, book.getName());
+            preparedStatement.setString(3, book.getContent_summary());
+            preparedStatement.setInt(4, book.getPublish_year());
+            preparedStatement.setDouble(5, book.getPrice());
+            preparedStatement.setInt(6, book.getQuantity());
+            preparedStatement.setString(7, book.getSize());
+            preparedStatement.setString(8, book.getWeight());
+            preparedStatement.setInt(9, book.getId());
 
             n = preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -112,7 +110,6 @@ public class DAOProduct extends BaseController {
         while (resultSet.next()) {
             int id = resultSet.getInt("id");
             int categoryId = resultSet.getInt("category_id");
-            int statusId = resultSet.getInt("status_id");
             String name = resultSet.getString("name");
             String contentSummary = resultSet.getString("content_summary");
             int publishYear = resultSet.getInt("publish_year");
@@ -124,7 +121,6 @@ public class DAOProduct extends BaseController {
             makeMenuHeader("Show a Book by ID");
             makeMenuRow("ID: " + id);
             makeMenuRow("Category ID: " + categoryId);
-            makeMenuRow("Status ID: " + statusId);
             makeMenuRow("Name: " + name);
             makeMenuRow("Content Summary: " + contentSummary);
             makeMenuRow("Publish Year: " + publishYear);
@@ -255,7 +251,6 @@ public class DAOProduct extends BaseController {
                 while (resultSet.next()) {
                     int id = resultSet.getInt("id");
                     int categoryId = resultSet.getInt("category_id");
-                    int statusId = resultSet.getInt("status_id");
                     String name = resultSet.getString("name");
                     String contentSummary = resultSet.getString("content_summary");
                     int publishYear = resultSet.getInt("publish_year");
@@ -264,7 +259,7 @@ public class DAOProduct extends BaseController {
                     String size = resultSet.getString("size");
                     String weight = resultSet.getString("weight");
 
-                    Book book = new Book(id, categoryId, statusId, name, contentSummary, publishYear, price
+                    Book book = new Book(id, categoryId, name, contentSummary, publishYear, price
                             , quantity, size, weight);
 
                     vector.add(book);

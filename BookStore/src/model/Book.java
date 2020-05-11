@@ -14,10 +14,8 @@ import java.util.ArrayList;
 public class Book {
     public int Id;
     public int category_id;
-    public int author_id;
     public String name;
     public String content_summary;
-    public int status_id;
     public int publish_year;
     public double price;
     public int quantity;
@@ -28,12 +26,11 @@ public class Book {
 
     }
 
-    public Book(int id, int categoryId, int statusId, String name, String contentSummary, int publishYear, double price, int quantity, String size, String weight) {
+    public Book(int id, int categoryId, String name, String contentSummary, int publishYear, double price, int quantity, String size, String weight) {
         this.Id = id;
         this.category_id = categoryId;
         this.name = name;
         this.content_summary = contentSummary;
-        this.status_id = statusId;
         this.publish_year = publishYear;
         this.price = price;
         this.quantity = quantity;
@@ -48,10 +45,6 @@ public class Book {
 
     public void setContent_summary(String content_summary) {
         this.content_summary = content_summary;
-    }
-
-    public void setStatus_id(int status_id) {
-        this.status_id = status_id;
     }
 
     public void setPublish_year(int publish_year) {
@@ -80,10 +73,6 @@ public class Book {
 
     public String getContent_summary() {
         return content_summary;
-    }
-
-    public int getStatus_id() {
-        return status_id;
     }
 
     public int getPublish_year() {
@@ -139,11 +128,4 @@ public class Book {
         this.content_summary = description;
     }
 
-    public int getAuthor_id() {
-        return author_id;
-    }
-
-    public void setAuthor_id(int author_id) {
-        this.author_id = author_id;
-    }
 }

@@ -5,6 +5,7 @@
  */
 package controller;
 
+import dao.DAOAuthor;
 import dao.DAOProduct;
 import model.Author;
 import model.Book;
@@ -23,11 +24,19 @@ import java.util.logging.Logger;
 public class ProductController extends BaseController {
 
     DAOProduct daoProduct;
+    DAOAuthor daoAuthor;
     private Statement _statement;
+    private CategoryController _categoryController;
+    private OrderController _orderController;
+    private AuthorController _authorController;
 
     public ProductController(Connection connect) {
         super(connect);
         daoProduct = new DAOProduct(connect);
+        daoAuthor = new DAOAuthor(connect);
+        _categoryController = new CategoryController(connect);
+        _orderController = new OrderController(connect);
+        _authorController = new AuthorController(connect);
         this.connection = connect;
 
         try {
@@ -46,7 +55,8 @@ public class ProductController extends BaseController {
         makeMenuRow("   3.Delete Product");
         makeMenuRow("   4.Watch Product Detail By ID");
         makeMenuRow("   5.Show all Products");
-        makeMenuRow("   6.Back to previous page");
+        makeMenuRow("   6.Add Author To Product");
+        makeMenuRow("   7.Back to previous page");
         makeMenuFooter();
     }
 
@@ -74,9 +84,13 @@ public class ProductController extends BaseController {
                     break;
                 case 5:
                     //clearConsole();
-                    showAllBooks();
+                    showBooks("");
                     break;
                 case 6:
+                    addAuthorToBook();
+                    break;
+                case 7:
+                    back();
                     break;
                 default:
                     makeRow("Option is invalid!");
@@ -88,6 +102,7 @@ public class ProductController extends BaseController {
     public void addBook() {
         makeMenuRow("Add a New Book");
         Book book = new Book();
+        _categoryController.showAllCategories();
         int categoryId = enterNumber("Category ID");
 
         while (true) {
@@ -96,8 +111,6 @@ public class ProductController extends BaseController {
                 categoryId = enterNumber("Category ID");
             } else {
                 book.setCategory_id(categoryId);
-                int statusId = enterNumber("Status ID");
-                book.setStatus_id(statusId);
                 String name = enterString("Book Name");
                 book.setName(name);
                 String contentSummary = enterString("Content Summery");
@@ -124,7 +137,7 @@ public class ProductController extends BaseController {
     public void editBook() {
         makeMenuRow("Edit a Book");
         Book book = new Book();
-        int id = enterNumber("ID to Edit");
+        int id = enterNumber("Book ID to Edit");
 
         while (true) {
             if (daoProduct.checkExistBook(id).equals("")) {
@@ -135,10 +148,11 @@ public class ProductController extends BaseController {
                 if (!choice.equalsIgnoreCase("y")) {
                     break;
                 } else {
-                    id = enterNumber("ID to Edit");
+                    id = enterNumber("Book ID to Edit");
                 }
             } else {
                 book.setId(id);
+                _categoryController.showAllCategories();
                 int categoryId = enterNumber("New Category ID");
 
                 while (true) {
@@ -147,8 +161,6 @@ public class ProductController extends BaseController {
                         categoryId = enterNumber("Category ID");
                     } else {
                         book.setCategory_id(categoryId);
-                        int statusId = enterNumber("New Status ID");
-                        book.setStatus_id(statusId);
                         String name = enterString("New Book Name");
                         book.setName(name);
                         String contentSummary = enterString("New Content Summery");
@@ -178,30 +190,86 @@ public class ProductController extends BaseController {
 
     public void deleteBook() {
         makeMenuHeader("Delete a Book");
-        int id = enterNumber("ID to Delete");
+        int id = enterNumber("Book ID to Delete");
 
         while (true) {
             if (daoProduct.checkExistBook(id).equals("")) {
                 System.out.println("Book not Found! Please try again!");
-                System.out.print("Retry? (y/n): ");
-                String choice = scanner.nextLine();
-
-                if (!choice.equalsIgnoreCase("y")) {
-                    break;
-                } else {
-                    id = enterNumber("ID to Delete");
-                }
+            } else if (_orderController.checkBookInOrder(id)) {
+                System.out.println("Book In Order! Please try again!");
             } else {
                 daoProduct.removeProduct(id);
                 System.out.println("Delete successfully!");
                 break;
             }
+
+            System.out.print("Retry? (y/n): ");
+            String choice = scanner.nextLine();
+
+            if (!choice.equalsIgnoreCase("y")) {
+                break;
+            } else {
+                id = enterNumber("Book ID to Delete");
+            }
+        }
+    }
+
+    public void addAuthorToBook() {
+
+        int book_id = enterNumber("Book Id To Add Authors");
+        while (true) {
+            if (daoProduct.checkExistBook(book_id).equals("")) {
+                System.out.println("Book not Found! Please try again!");
+                System.out.print("Retry? (y/n): ");
+            } else {
+
+                _authorController.showAllAuthors();
+                int author_id = enterNumber("Author Id Add");
+
+                while (true) {
+
+                    if (daoAuthor.checkExistedAuthor(author_id).equals("")) {
+                        System.out.println("Author not Found! Please try again!");
+                        System.out.print("Retry? (y/n): ");
+                    } else if (daoAuthor.checkAuthorBook(book_id, author_id)) {
+                        System.out.println("Author added after! Please try again!");
+                        System.out.print("Retry? (y/n): ");
+                    } else {
+                        addAuthorToBookSql(book_id, author_id);
+                        System.out.println(" More Add?(y/n)!");
+                    }
+                    String choice = scanner.nextLine();
+                    if (!choice.equalsIgnoreCase("y")) {
+                        break;
+                    } else {
+                        author_id = enterNumber("Author ID Add");
+                    }
+                }
+            }
+
+            String choice = scanner.nextLine();
+            if (!choice.equalsIgnoreCase("y")) {
+                break;
+            } else {
+                book_id = enterNumber("Book Id To Add Authors");
+            }
+        }
+    }
+
+    public void addAuthorToBookSql(int book_id, int author_id) {
+        try {
+            _statement.executeUpdate("INSERT INTO book_store.dbo.book_author\n"
+                    + "(book_id, author_id)\n"
+                    + "VALUES(" + book_id + ", " + author_id + ");");
+            makeRow("Insert Author To Book successful!");
+        } catch (SQLException ex) {
+            makeRow("Insert Author To Book Fail!");
         }
     }
 
     public void showABook() {
 
-        int id = enterNumber("ID to Show");
+        int id = enterNumber("Book ID to Show");
 
         while (true) {
             if (daoProduct.checkExistBook(id).equals("")) {
@@ -212,7 +280,7 @@ public class ProductController extends BaseController {
                 if (!choice.equalsIgnoreCase("y")) {
                     break;
                 } else {
-                    id = enterNumber("ID to Show");
+                    id = enterNumber("Book ID to Show");
                 }
             } else {
                 daoProduct.showABook(id);
@@ -245,6 +313,8 @@ public class ProductController extends BaseController {
             makeRow("Publish Year:" + book.getPublish_year());
             makeRow("Content Summary:" + book.getContent_summary());
             makeRow("Quantity:" + book.getQuantity());
+            makeRow("Size:" + book.getSize());
+            makeRow("Weight:" + book.getWeight());
             if (book.authors != null) {
                 makeRow("Author: ");
                 for (Author author : book.authors) {
@@ -282,7 +352,6 @@ public class ProductController extends BaseController {
                 Book book = new Book();
                 Author author = new Author();
                 book.setId(rs.getInt("Id"));
-                book.setAuthor_id(rs.getInt("Author_id"));
                 book.setName(rs.getString("Name"));
                 book.setCategory_id(rs.getInt("Category_id"));
                 book.setContent_summary(rs.getString("Content_summary"));
@@ -329,7 +398,6 @@ public class ProductController extends BaseController {
             while (rs.next()) {
                 Book book = new Book();
                 book.setId(rs.getInt("Id"));
-                book.setAuthor_id(rs.getInt("Author_id"));
                 book.setName(rs.getString("Name"));
                 book.setCategory_id(rs.getInt("Category_id"));
                 book.setContent_summary(rs.getString("Content_summary"));
@@ -343,6 +411,17 @@ public class ProductController extends BaseController {
         } catch (SQLException ex) {
         }
         return books;
+    }
+
+    public int getQuantityBook(int book_id) {
+        try {
+            ResultSet rs = _statement.executeQuery("select * from book b where id=" + book_id);
+            while (rs.next()) {
+                return rs.getInt("Quantity");
+            }
+        } catch (SQLException ex) {
+        }
+        return -1;
     }
 
 }

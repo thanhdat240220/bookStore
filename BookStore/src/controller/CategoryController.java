@@ -96,7 +96,7 @@ public class CategoryController extends BaseController {
     public void editCategory() {
         makeMenuHeader("Edit a Category");
         Category category = new Category();
-        int id = enterNumber("ID to Edit");
+        int id = enterNumber("Category ID to Edit");
 
         while (true) {
             if (daoCategory.checkExistedCategory(id).equals("")) {
@@ -107,7 +107,7 @@ public class CategoryController extends BaseController {
                 if (!choice.equalsIgnoreCase("y")) {
                     break;
                 } else {
-                    id = enterNumber("ID to Edit");
+                    id = enterNumber("Category ID to Edit");
                 }
             } else {
                 category.setId(id);
@@ -123,30 +123,33 @@ public class CategoryController extends BaseController {
 
     public void deleteCategory() {
         makeMenuHeader("Delete a Category");
-        int id = enterNumber("ID to Delete");
+        int id = enterNumber("Category ID to Delete");
 
         while (true) {
             if (daoCategory.checkExistedCategory(id).equals("")) {
                 System.out.println("Category not Found! Please try again!");
                 System.out.print("Retry? (y/n): ");
-                String choice = scanner.nextLine();
-
-                if (!choice.equalsIgnoreCase("y")) {
-                    break;
-                } else {
-                    id = enterNumber("ID to Delete");
-                }
+            } else if (daoCategory.checkCategoryHasBook(id)) {
+                System.out.println("Category Has Book! Please try again!");
+                System.out.print("Retry? (y/n): ");
             } else {
                 daoCategory.removeCategory(id);
                 makeMenuFooter();
                 break;
+            }
+
+            String choice = scanner.nextLine();
+            if (!choice.equalsIgnoreCase("y")) {
+                break;
+            } else {
+                id = enterNumber("Category ID to Delete");
             }
         }
     }
 
     public void showACategory() {
         makeMenuHeader("Show a Category by ID");
-        int id = enterNumber("ID to Show");
+        int id = enterNumber("Category ID to Show");
 //        daoCategory.showACategory(id);
 //        makeMenuFooter();
         while (true) {
@@ -158,10 +161,10 @@ public class CategoryController extends BaseController {
                 if (!choice.equalsIgnoreCase("y")) {
                     break;
                 } else {
-                    id = enterNumber("ID to Show");
+                    id = enterNumber("Category ID to Show");
                 }
             } else {
-                daoCategory.removeCategory(id);
+                daoCategory.showACategory(id);
                 makeMenuFooter();
                 break;
             }
@@ -169,9 +172,7 @@ public class CategoryController extends BaseController {
     }
 
     public void showAllCategories() {
-        makeMenuHeader("Show all Categories");
         daoCategory.showAllCategories();
-        makeMenuFooter();
     }
 
     public void showCategory(String wheres) {
@@ -181,7 +182,7 @@ public class CategoryController extends BaseController {
             for (Category category : categories) {
                 makeRow(category.id + ". " + category.name);
             }
-        }else{
+        } else {
             makeRow("Not Found");
         }
     }

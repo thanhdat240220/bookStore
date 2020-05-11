@@ -332,12 +332,26 @@ public class OrderController extends BaseController {
             
             for (OrderDetail orderDetail : orderDetails) {
                 makeRow("-------------------------------------------");
-                makeRow("- Book Name: " + orderDetail.book_name);
-                makeRow("- Quantity: " + orderDetail.quantity);
+                makeRow("- Book Id: " + orderDetail.getId());
+                makeRow("- Book Name: " + orderDetail.getBook_name());
+                makeRow("- Price: " + orderDetail.getPrice());
+                makeRow("- Quantity: " + orderDetail.getQuantity());
             }
         } else {
             makeRow("Not found");
         }
+    }
+    
+    public boolean checkBookInOrder(int book_id) {
+        try {
+            ResultSet rs = _statement.executeQuery("select * "
+                    + "from orderDetail where book_id=" + book_id);
+            while (rs.next()) {
+                return true;
+            }
+        } catch (SQLException ex) {
+        }
+        return false;
     }
     
     public String statusName(int StatusId) {

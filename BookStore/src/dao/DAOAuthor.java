@@ -6,6 +6,7 @@ import model.Author;
 import java.sql.*;
 
 public class DAOAuthor extends BaseController {
+
     Connection connection;
 
     public DAOAuthor(Connection connection) {
@@ -25,7 +26,7 @@ public class DAOAuthor extends BaseController {
             n = preparedStatement.executeUpdate();
             System.out.println("Added successfully!");
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Added fail!");
         }
 
         return n;
@@ -45,7 +46,7 @@ public class DAOAuthor extends BaseController {
             n = preparedStatement.executeUpdate();
             System.out.println("Edited successfully!");
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Edited fail!");
         }
 
         return n;
@@ -80,21 +81,37 @@ public class DAOAuthor extends BaseController {
         ResultSet resultSet = getData(sql);
 
         try {
-
+            makeMenuHeader("Show all Authors");
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
 //                String date_of_birth = resultSet.getString("birth_date");
-                String date_of_birth = formatDate(resultSet.getString("birth_date"));
+                Date date_of_birth = resultSet.getDate("birth_date");
 
                 makeRow("ID: " + id);
                 makeRow("Name: " + name);
                 makeRow("Date of Birth: " + date_of_birth);
                 makeRow("--------------------------");
             }
+            makeMenuFooter();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+    }
+
+    public boolean checkAuthorBook(int book_id, int author_id) {
+        String sql = "Select * From book_author where book_id=" + book_id + " and author_id=" + author_id;
+        ResultSet resultSet = getData(sql);
+        try {
+            while (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
     }
 
 //    public String checkExistedAuthor(int id) {
@@ -132,7 +149,6 @@ public class DAOAuthor extends BaseController {
 //
 //        return author;
 //    }
-
     public String checkExistedAuthor(int id) {
         String sql = "SELECT * FROM author WHERE id=" + id;
         String strToCheck = "";
@@ -163,7 +179,7 @@ public class DAOAuthor extends BaseController {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
-                String birth_date = formatDate(resultSet.getString("birth_date"));
+                String birth_date = resultSet.getString("birth_date");
 
                 author = new Author(id, name, birth_date);
             }
@@ -180,10 +196,10 @@ public class DAOAuthor extends BaseController {
 
         String[] arrStr = date.split("-");
 
-        for(int i=0; i<arrStr.length/2; i++){
+        for (int i = 0; i < arrStr.length / 2; i++) {
             String temp = arrStr[i];
-            arrStr[i] = arrStr[arrStr.length -i -1];
-            arrStr[arrStr.length -i -1] = temp;
+            arrStr[i] = arrStr[arrStr.length - i - 1];
+            arrStr[arrStr.length - i - 1] = temp;
         }
 
         return String.join("/", arrStr);

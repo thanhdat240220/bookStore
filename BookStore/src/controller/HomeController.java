@@ -18,6 +18,7 @@ import java.util.ArrayList;
  * @author T440s
  */
 public class HomeController extends BaseController {
+
     private ProductController _productController;
     private CategoryController _categoryController;
     private OrderController _orderController;
@@ -31,7 +32,6 @@ public class HomeController extends BaseController {
         _orderController = new OrderController(connect);
         _cartList = new Cart();
     }
-
 
     public void menuHome() {
         int choice;
@@ -74,7 +74,7 @@ public class HomeController extends BaseController {
         System.out.println("");
         int category_id;
         do {
-            category_id = enterNumber("an option category");
+            category_id = enterInterger("an option category");
 
             switch (category_id) {
                 case 0:
@@ -131,10 +131,11 @@ public class HomeController extends BaseController {
         boolean retry = false;
         do {
             book_id = enterNumber("Book Id");
+            int quantity_storage = _productController.getQuantityBook(book_id);
             ArrayList<Book> books = _productController.getBooks(" b.id=" + book_id);
             if (books.size() > 0) {
                 Book book = books.get(0);
-                int quantity = enterInterger("Quantity");
+                int quantity = enterQuantity("Quantity", quantity_storage);
                 boolean checkbook = false;
                 //
                 for (CartDetail cart : _cartList.getDetails()) {
@@ -177,6 +178,8 @@ public class HomeController extends BaseController {
                 makeRow("Book Name:" + book.getName());
                 makeRow("Price:" + book.getPrice());
                 makeRow("Quantity Buy:" + cart.getQuantity());
+                makeRow("Size:" + book.getSize());
+                makeRow("Weight:" + book.getWeight());
                 priceTotal += book.getPrice() * cart.getQuantity();
                 if (book.authors != null) {
                     makeRow("Author: ");
@@ -231,9 +234,10 @@ public class HomeController extends BaseController {
         do {
 
             book_id = enterNumber("Book Id");
+            int quantity_storage = _productController.getQuantityBook(book_id);
             for (CartDetail detail : _cartList.getDetails()) {
                 if (detail.getBook().getId() == book_id) {
-                    int quantity = enterInterger("Quantity");
+                    int quantity = enterQuantity("Quantity",quantity_storage);
                     detail.setQuantity(quantity);
                     updatePriceCart();
                     checkbook = true;
@@ -350,7 +354,42 @@ public class HomeController extends BaseController {
                 System.out.println("- " + option + " must be a positive number!");
             }
         } while (true);
+        return Double.parseDouble(choiceStr);
+    }
+
+    public int enterInterger(String option) {
+        String choiceStr = "";
+        do {
+            System.out.print("- Enter " + option + ":");
+            choiceStr = scanner.nextLine();
+            try {
+                if (isDouble(choiceStr) || Integer.parseInt(choiceStr) == 0) {
+                    break;
+                } else {
+                    System.out.println("- " + option + " must be a positive number!");
+                }
+            } catch (Exception e) {
+                System.out.println("- " + option + " must be a positive number!");
+            }
+        } while (true);
         return (int) Double.parseDouble(choiceStr);
     }
 
+    public int enterQuantity(String option, int maxQuantity) {
+        String choiceStr = "";
+        do {
+            System.out.print("- Enter " + option + ":");
+            choiceStr = scanner.nextLine();
+            if (isDouble(choiceStr) || Integer.parseInt(choiceStr) == 0) {
+                if (Double.parseDouble(choiceStr) < maxQuantity) {
+                    break;
+                } else {
+                    System.out.println("This Book Has Quantity In Storage Is " + maxQuantity);
+                }
+            } else {
+                System.out.println("- " + option + " must be a positive number!");
+            }
+        } while (true);
+        return (int) Double.parseDouble(choiceStr);
+    }
 }
