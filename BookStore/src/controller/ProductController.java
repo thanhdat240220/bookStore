@@ -96,7 +96,7 @@ public class ProductController extends BaseController {
                     makeRow("Option is invalid!");
                     break;
             }
-        } while (choice != 6);
+        } while (choice != 7);
     }
 
     public void addBook() {
@@ -236,10 +236,11 @@ public class ProductController extends BaseController {
                         System.out.print("Retry? (y/n): ");
                     } else {
                         addAuthorToBookSql(book_id, author_id);
-                        System.out.println(" More Add?(y/n)!");
+                        System.out.println(" Add more Author?(y/n)!");
                     }
                     String choice = scanner.nextLine();
                     if (!choice.equalsIgnoreCase("y")) {
+                        System.out.println("Press n again to confirm exit: ");
                         break;
                     } else {
                         author_id = enterNumber("Author ID Add");
@@ -261,7 +262,7 @@ public class ProductController extends BaseController {
             _statement.executeUpdate("INSERT INTO book_store.dbo.book_author\n"
                     + "(book_id, author_id)\n"
                     + "VALUES(" + book_id + ", " + author_id + ");");
-            makeRow("Insert Author To Book successful!");
+            makeRow("Insert Author To Book successfully!");
         } catch (SQLException ex) {
             makeRow("Insert Author To Book Fail!");
         }
