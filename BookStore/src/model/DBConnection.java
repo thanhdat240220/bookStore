@@ -25,11 +25,11 @@ public class DBConnection {
     private String port;
 
     public DBConnection() {
-        port = "49690";
+        port = "1433";
         driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
         connectionString = "jdbc:sqlserver://127.0.0.1:" + port + ";databaseName=book_store";
         dbUserName = "sa";
-        dbPassWord = "sana";
+        dbPassWord = "123456";
     }
 
     public DBConnection(String userName, String passWord, String dbString) {
