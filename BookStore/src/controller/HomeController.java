@@ -37,28 +37,28 @@ public class HomeController extends BaseController {
         int choice;
         do {
             makeMenuHeader("System management window");
-            makeMenuRow("1. Login User.");
-            makeMenuRow("2. Filter Books by Category");
-            makeMenuRow("3. Quick Search Books.");
-            makeMenuRow("4. Show Cart");
-            makeMenuRow("5. Add Book to Cart.");
-            makeMenuRow("6. Back to Main Menu");
+            //makeMenuRow("1. Login User.");
+            makeMenuRow("1. Filter Books by Category");
+            makeMenuRow("2. Quick Search Books.");
+            makeMenuRow("3. Show Cart");
+            makeMenuRow("4. Add Book to Cart.");
+            makeMenuRow("5. Back to Main Menu");
             makeMenuFooter();
             choice = enterNumber("an option");
             switch (choice) {
-                case 2:
+                case 1:
                     menuKind();
                     break;
-                case 3:
+                case 2:
                     quickSearch();
                     break;
-                case 4:
+                case 3:
                     manageCart();
                     break;
-                case 5:
+                case 4:
                     addBookToCart();
                     break;
-                case 6:
+                case 5:
                     back();
                     break;
                 default:

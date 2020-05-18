@@ -3,7 +3,27 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/bookStore-trung/BookStore/src/bookstore/BookStore.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/controller/ProductController.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/controller/BaseController.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/model/DBConnection.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/viewmodel/Cart.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/viewmodel/CartDetail.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/controller/CategoryController.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/model/Customer.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/dao/DAOProduct.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/controller/AuthorController.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/controller/HomeController.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/dao/DAOCategory.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/model/Employee.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/model/OrderDetail.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/model/Author.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/bookstore/BookStore.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/model/Book.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/controller/AdminManager.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/dao/DAOAuthor.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/controller/UserController.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/model/Order.java</file>
+            <file>file:/D:/T1807I/bookStore/BookStore/src/controller/OrderController.java</file>
         </group>
     </open-files>
 </project-private>
