@@ -65,7 +65,7 @@ public class HomeController extends BaseController {
                     System.out.println(" Option is invalid!");
                     break;
             }
-        } while (choice != 6);
+        } while (choice != 5);
     }
 
     public void menuKind() {
